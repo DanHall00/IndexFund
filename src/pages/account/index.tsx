@@ -34,22 +34,22 @@ export default function Account() {
 				>
 					<Box>
 						<Typography variant="h5">Username</Typography>
-						<Typography variant="subtitle1">{userData.username}</Typography>
+						<Typography variant="subtitle1">{userData?.username}</Typography>
 					</Box>
 					<Box>
 						<Typography variant="h5">Email</Typography>
-						<Typography variant="subtitle1">{userData.email}</Typography>
+						<Typography variant="subtitle1">{userData?.email}</Typography>
 					</Box>
 					<Box>
 						<Typography variant="h5">Account Number</Typography>
 						<Typography variant="subtitle1">
-							{userData.account_number}
+							{userData?.account_number}
 						</Typography>
 					</Box>
 					<Box>
 						<Typography variant="h5">Account Opened</Typography>
 						<Typography variant="subtitle1">
-							{new Date(userData.createdAt).toLocaleDateString()}
+							{userData && new Date(userData.createdAt).toLocaleDateString()}
 						</Typography>
 					</Box>
 				</Box>
