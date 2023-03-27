@@ -4,9 +4,10 @@ import React from 'react';
 interface IShortcutProps {
 	title: string;
 	description?: string;
-	value: string | React.ReactNode;
+	value?: string | React.ReactNode;
 	valueProps?: {};
 	action?: () => void;
+	actionLabel?: string;
 }
 
 export default function Shortcut({
@@ -15,6 +16,7 @@ export default function Shortcut({
 	value,
 	valueProps,
 	action,
+	actionLabel = 'View Details',
 }: IShortcutProps) {
 	return (
 		<Box
@@ -57,7 +59,7 @@ export default function Shortcut({
 						onClick={action}
 						sx={{ color: 'white', fontWeight: 600 }}
 					>
-						View Details
+						{actionLabel}
 					</Button>
 				)}
 			</Box>
