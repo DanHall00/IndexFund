@@ -19,8 +19,7 @@ async function dbConnect(): Promise<Mongoose> {
 
 	if (!cached.promise) {
 		const opts: ConnectOptions = {
-			dbName: 'IndexFundAssessment',
-			bufferCommands: false,
+			dbName: 'IndexFundAssessment'
 		};
 
 		if (uri === undefined) {

@@ -1,7 +1,7 @@
-const getUserById = async (id: string | undefined) => {
+const getCurrentUser = async () => {
 	try {
 		const user = await (
-			await fetch(`/api/user/${id}`, {
+			await fetch(`/api/user/me`, {
 				headers: { 'Content-Type': 'application/json' },
 			})
 		).json();
@@ -12,4 +12,4 @@ const getUserById = async (id: string | undefined) => {
 	}
 };
 
-export { getUserById };
+export { getCurrentUser };

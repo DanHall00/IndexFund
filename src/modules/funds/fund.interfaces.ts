@@ -1,7 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
 import { QueryResult } from '../paginate/paginate';
 import { IStockDoc } from '../stocks/stock.interfaces';
-import { IUser } from '../users/user.interfaces';
+import { IUserDoc } from '../users/user.interfaces';
 
 export interface IFund {
 	name: string;
@@ -9,8 +9,8 @@ export interface IFund {
 }
 
 export interface IUserFund {
-	user: IUser;
-	fund: IFund;
+	user: IUserDoc;
+	fund: IFundDoc;
 	value: number;
 }
 
