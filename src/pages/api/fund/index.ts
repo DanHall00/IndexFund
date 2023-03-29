@@ -1,12 +1,20 @@
 import { Fund } from '@/modules/funds';
 import { IFund } from '@/modules/funds/fund.interfaces';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../lib/mongodb';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
+	const session = await getServerSession(req, res, authOptions);
+
+	if (!session) {
+		return res.status(401).json({ message: 'User must be logged in.' });
+	}
+
 	await dbConnect();
 
 	switch (req.method) {
@@ -20,9 +28,12 @@ export default async function handler(
 			}
 			break;
 		case 'POST':
-			const { name, assets }: IFund = JSON.parse(req.body);
+			if (session.user.role !== 'admin') {
+				return res.status(403).json({ message: 'Admin only endpoint.' });
+			}
+			const fundBody: IFund = req.body;
 			try {
-				const fund = await Fund.create({ name, assets });
+				const fund = await Fund.create(fundBody);
 				res.status(200).json(fund);
 			} catch (err) {
 				console.log(err);

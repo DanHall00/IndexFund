@@ -5,13 +5,13 @@ import { IVoteDoc, IVoteModel, VoteOption } from './vote.interfaces';
 
 const voteSchema = new mongoose.Schema<IVoteDoc>(
 	{
-		userId: {
+		user: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 		},
-		stockId: {
+		ballot: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Stock',
+			ref: 'Ballot',
 		},
 		action: {
 			type: String,

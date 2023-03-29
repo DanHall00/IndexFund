@@ -1,5 +1,5 @@
-import { Stock } from '@/modules/stocks';
-import { IStock } from '@/modules/stocks/stock.interfaces';
+import { Ballot } from '@/modules/ballots';
+import { IBallot } from '@/modules/ballots/ballot.interfaces';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../lib/mongodb';
@@ -20,24 +20,24 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const stocks = await Stock.find({});
-				res.status(200).json(stocks);
+				const ballots = await Ballot.find({});
+				res.status(200).json(ballots);
 			} catch (err) {
 				console.log(err);
-				res.status(400).json({ message: 'Could not get stocks.' });
+				res.status(400).json({ message: 'Could not get ballots.' });
 			}
 			break;
 		case 'POST':
 			if (session.user.role !== 'admin') {
 				return res.status(403).json({ message: 'Admin only endpoint.' });
 			}
+			const ballotBody: IBallot = req.body;
 			try {
-				const stockBody: IStock = req.body;
-				const stock = await Stock.create(stockBody);
-				res.status(200).json(stock);
+				const ballot = await Ballot.create(ballotBody);
+				res.status(200).json(ballot);
 			} catch (err) {
 				console.log(err);
-				res.status(400).json({ message: 'Could not create stock.' });
+				res.status(400).json({ message: 'Could not create ballot.' });
 			}
 			break;
 		default:

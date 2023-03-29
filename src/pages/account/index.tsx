@@ -1,5 +1,5 @@
-import AppLayout from '@/components/layouts/AppLayout';
-import { getUserById } from '@/modules/users/user.service';
+import AppLayout from '@/components/layout/AppLayout';
+import { getCurrentUser } from '@/modules/users/user.service';
 import { Box, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -8,11 +8,9 @@ import { useQuery } from 'react-query';
 export default function Account() {
 	const { data: session } = useSession();
 
-	const { data: userData } = useQuery(
-		['user', session?.user.id],
-		() => getUserById(session?.user.id),
-		{ enabled: !!session }
-	);
+	const { data: userData } = useQuery(['currentuser'], getCurrentUser, {
+		enabled: !!session,
+	});
 
 	return (
 		<>

@@ -1,10 +1,8 @@
-import AppLayout from '@/components/layouts/AppLayout';
+import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
-import ShortcutContainer from '@/components/shared/ShortcutContainer';
 import { IFundDoc } from '@/modules/funds/fund.interfaces';
 import { getFundById } from '@/modules/funds/fund.service';
 import { IStockDoc } from '@/modules/stocks/stock.interfaces';
-import { getUserById } from '@/modules/users/user.service';
 import { Skeleton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -33,7 +31,7 @@ const Fund = () => {
 			</Head>
 			<AppLayout>
 				<Typography variant="h3">{fund ? fund.name : <Skeleton />}</Typography>
-				{!fundsLoading && !fundsFetching ? (
+				{/* {!fundsLoading && !fundsFetching ? (
 					fund ? (
 						fund.assets.length > 0 ? (
 							<ShortcutContainer justifyContent="start">
@@ -56,7 +54,7 @@ const Fund = () => {
 					)
 				) : (
 					<Typography>Loading...</Typography>
-				)}
+				)} */}
 			</AppLayout>
 		</>
 	);

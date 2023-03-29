@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
+import { IBallotDoc } from '../ballots/ballot.interfaces';
 import { QueryResult } from '../paginate/paginate';
-import { IStockDoc } from '../stocks/stock.interfaces';
 import { IUserDoc } from '../users/user.interfaces';
 
 export enum VoteOption {
@@ -11,9 +11,9 @@ export enum VoteOption {
 }
 
 export interface IVote {
-	userId: IUserDoc;
-	stockId: IStockDoc;
-	action: VoteOption;
+	user: IUserDoc;
+	ballot: IBallotDoc;
+	action: string;
 }
 
 export interface IVoteDoc extends IVote, Document {}
@@ -25,4 +25,4 @@ export interface IVoteModel extends Model<IVoteDoc> {
 	): Promise<QueryResult>;
 }
 
-export type UpdateStockBody = Partial<IVote>;
+export type UpdateVoteBody = Partial<IVote>;

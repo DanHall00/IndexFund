@@ -1,9 +1,9 @@
-import { Stock } from '@/modules/stocks';
+import { Ballot } from '@/modules/ballots';
 import {
-	IStock,
-	IStockDoc,
-	UpdateStockBody,
-} from '@/modules/stocks/stock.interfaces';
+	IBallotDoc,
+	UpdateBallotBody,
+} from '@/modules/ballots/ballot.interfaces';
+import { IStock, UpdateStockBody } from '@/modules/stocks/stock.interfaces';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../lib/mongodb';
@@ -26,44 +26,46 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const stock = await Stock.findById(id);
-				return res.status(200).json(stock);
+				const ballot = await Ballot.findById(id).populate('stock');
+				return res.status(200).json(ballot);
 			} catch (err) {
 				console.log(err);
-				return res.status(500).json({ message: 'Could not get stocks.' });
+				return res.status(500).json({ message: 'Could not get ballot.' });
 			}
 		case 'PUT':
 			if (session.user.role !== 'admin') {
 				return res.status(403).json({ message: 'Admin only endpoint.' });
 			}
 			try {
-				const stock: IStockDoc | null = await Stock.findById<IStockDoc>(id);
+				const ballot: IBallotDoc | null = await Ballot.findById<IBallotDoc>(id);
 
-				if (!stock) {
-					return res.status(400).json({ message: 'Stock not found.' });
+				if (!ballot) {
+					return res.status(400).json({ message: 'Ballot not found.' });
 				}
 
-				const updatedStock: UpdateStockBody = req.body;
+				const updatedBallot: UpdateBallotBody = req.body;
 
-				Object.assign(stock, updatedStock);
+				Object.assign(ballot, updatedBallot);
 
-				await stock.save();
+				await ballot.save();
 
-				return res.status(200).json(stock);
+				return res.status(200).json(ballot);
 			} catch (err) {
 				console.log(err);
-				return res.status(500).json({ message: 'Could not create stock.' });
+				return res.status(500).json({ message: 'Could not create ballot.' });
 			}
 		case 'DELETE':
 			if (session.user.role !== 'admin') {
 				return res.status(403).json({ message: 'Admin only endpoint.' });
 			}
 			try {
-				await Stock.findByIdAndDelete(id);
-				return res.status(200).json({ message: 'Successfully deleted stock.' });
+				await Ballot.findByIdAndDelete(id);
+				return res
+					.status(200)
+					.json({ message: 'Successfully deleted ballot.' });
 			} catch (err) {
 				console.error(err);
-				return res.status(500).json({ message: 'Could not delete stock' });
+				return res.status(500).json({ message: 'Could not delete ballot.' });
 			}
 		default:
 			return res.status(405).json({ message: 'Method not supported.' });

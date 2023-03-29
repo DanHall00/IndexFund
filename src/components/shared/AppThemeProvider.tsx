@@ -1,5 +1,5 @@
 import '@fontsource/cabin';
-import { AppBar, Box, CssBaseline, Toolbar, Typography } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import {
 	ThemeProvider,
 	createTheme,
@@ -7,19 +7,50 @@ import {
 } from '@mui/material/styles';
 import React from 'react';
 
+const primary = '#af4c2a';
+const secondary = '#2f699f';
+
+const background = '#0c0e0f';
+const text = '#f8e5d5';
+
 let innerTheme = createTheme({
 	palette: {
+		mode: 'dark',
 		primary: {
-			main: '#E9AF59',
+			main: primary,
 		},
 		secondary: {
-			main: '#C7C7C7',
+			main: secondary,
+		},
+		background: {
+			default: background,
 		},
 	},
 	typography: {
 		fontFamily: '"Cabin", sans-serif',
-		allVariants: {
-			color: '#3F3F3F',
+		h1: {
+			color: primary,
+		},
+		h2: {
+			color: primary,
+		},
+		h3: {
+			color: primary,
+		},
+		h4: {
+			color: primary,
+		},
+		h5: {
+			color: primary,
+		},
+		h6: {
+			color: primary,
+		},
+		subtitle1: {
+			color: text,
+		},
+		subtitle2: {
+			color: text,
 		},
 	},
 });
@@ -31,17 +62,7 @@ export default function AppThemeProvider(props: { children: React.ReactNode }) {
 	return (
 		<ThemeProvider theme={innerTheme}>
 			<CssBaseline />
-			<Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-				<AppBar position="absolute" sx={{ bgcolor: '#DC6262' }}>
-					<Toolbar sx={{ justifyContent: 'center' }}>
-						<Typography variant="h6" sx={{ fontWeight: 800 }} color={'white'}>
-							This is a dummy site for testing purposes only. Any data inputted
-							may not be securely stored.
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				{children}
-			</Box>
+			<Box sx={{ display: 'flex' }}>{children}</Box>
 		</ThemeProvider>
 	);
 }

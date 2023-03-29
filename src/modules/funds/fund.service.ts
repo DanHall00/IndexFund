@@ -7,7 +7,20 @@ const getFunds = async () => {
 		).json();
 		return funds;
 	} catch (e) {
-		throw new Error('Could not get funds.');
+		return { error: 'Could not load funds.' };
+	}
+};
+
+const getUserFunds = async () => {
+	try {
+		const funds = await (
+			await fetch(`/api/fund/user`, {
+				headers: { 'Content-Type': 'application/json' },
+			})
+		).json();
+		return funds;
+	} catch (e) {
+		return { error: 'Could not load funds.' };
 	}
 };
 
@@ -20,8 +33,8 @@ const getFundById = async (id: any) => {
 		).json();
 		return fund;
 	} catch (e) {
-		throw new Error('Could not get fund.');
+		return { error: 'Could not load fund.' };
 	}
 };
 
-export { getFundById, getFunds };
+export { getFundById, getFunds, getUserFunds };

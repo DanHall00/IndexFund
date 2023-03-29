@@ -1,4 +1,5 @@
 import * as fundInterfaces from './fund.interfaces';
 import Fund from './fund.model';
+import UserFund from './userFund.model';
 
-export { fundInterfaces, Fund };
+export { Fund, UserFund, fundInterfaces };

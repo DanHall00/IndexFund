@@ -11,7 +11,9 @@ export interface IFund {
 export interface IUserFund {
 	user: IUserDoc;
 	fund: IFundDoc;
+	initialValue: number;
 	value: number;
+	active: boolean;
 }
 
 export interface IFundDoc extends IFund, Document {}

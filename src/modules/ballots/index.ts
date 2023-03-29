@@ -1,4 +1,4 @@
-import * as stockInterfaces from './stock.interfaces';
-import Stock from './stock.model';
+import * as ballotInterfaces from './ballot.interfaces';
+import Ballot from './ballot.model';
 
-export { stockInterfaces, Stock };
+export { Ballot, ballotInterfaces };

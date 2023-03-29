@@ -1,4 +1,13 @@
-import { Box, Button, Typography } from '@mui/material';
+import {
+	Box,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	CardHeader,
+	Grid,
+	Typography,
+} from '@mui/material';
 import React from 'react';
 
 interface IShortcutProps {
@@ -19,50 +28,44 @@ export default function Shortcut({
 	actionLabel = 'View Details',
 }: IShortcutProps) {
 	return (
-		<Box
-			sx={{
-				width: '200px',
-				height: '200px',
-				bgcolor: '#F0F0F0',
-				boxShadow: '4px 4px 4px rgba(0,0,0,0.25)',
-				borderRadius: '10px',
-				p: 2,
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'space-between',
-			}}
-		>
-			<Box>
-				<Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-					{title}
-				</Typography>
-				<Typography variant="caption">{description}</Typography>
-			</Box>
-			<Box
+		<Grid item xs={12} md={6} lg={3}>
+			<Card
 				sx={{
-					...valueProps,
-					fontWeight: 600,
-					fontSize: 24,
+					height: '100%',
 					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
+					flexDirection: 'column',
+					borderRadius: 3,
+					boxShadow: '4px 4px 4px rgba(0, 0, 0, 0.4)',
 				}}
 			>
-				{value}
-			</Box>
-			<Box>
+				<CardHeader title={title} subheader={description} />
+				<CardContent
+					sx={{
+						...valueProps,
+						textAlign: 'center',
+						fontWeight: 600,
+						fontSize: 24,
+						flexGrow: 1,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					{value}
+				</CardContent>
 				{action && (
-					<Button
-						color="primary"
-						variant="contained"
-						fullWidth
-						onClick={action}
-						sx={{ color: 'white', fontWeight: 600 }}
-					>
-						{actionLabel}
-					</Button>
+					<CardActions>
+						<Button
+							variant="contained"
+							fullWidth
+							color="secondary"
+							onClick={action}
+						>
+							{actionLabel}
+						</Button>
+					</CardActions>
 				)}
-			</Box>
-		</Box>
+			</Card>
+		</Grid>
 	);
 }

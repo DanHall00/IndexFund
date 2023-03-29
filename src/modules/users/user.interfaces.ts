@@ -7,7 +7,7 @@ export interface IUser {
 	account_number: string;
 	password: string;
 	role: string;
-	balance?: number;
+	balance: number;
 }
 
 export interface IUserDoc extends IUser, Document {

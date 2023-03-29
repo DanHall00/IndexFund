@@ -15,7 +15,12 @@ const userFundSchema = new mongoose.Schema<IUserFundDoc>(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Fund',
 		},
+		initialValue: Number,
 		value: Number,
+		active: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{ timestamps: true }
 );
