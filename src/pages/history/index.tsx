@@ -85,15 +85,9 @@ export default function History() {
 									}}
 								>
 									<Typography variant="subtitle1">
-										Looks like you currently aren&apos;t invested in any funds.
+										You currently haven&aps;t voted in any ballots, when you do
+										your votes will appear here.
 									</Typography>
-									<Button
-										variant="contained"
-										sx={{ color: 'white' }}
-										onClick={() => router.push('/funds')}
-									>
-										Invest
-									</Button>
 								</Box>
 							</>
 						)
@@ -104,13 +98,13 @@ export default function History() {
 									display: 'flex',
 									justifyContent: 'center',
 									flexDirection: 'column',
-									alignContent: 'center',
+									alignItems: 'center',
 									textAlign: 'center',
 									gap: 2,
 								}}
 							>
 								<Typography variant="subtitle1">
-									An error occured while retrieving your funds, please try again
+									An error occured while retrieving your votes, please try again
 									later.
 								</Typography>
 							</Box>
@@ -122,12 +116,13 @@ export default function History() {
 							display: 'flex',
 							justifyContent: 'center',
 							flexDirection: 'column',
+							alignItems: 'center',
 							textAlign: 'center',
 							gap: 2,
 						}}
 					>
 						<CircularProgress variant="indeterminate" />
-						<Typography variant="subtitle1">Loading Your Funds</Typography>
+						<Typography variant="subtitle1">Loading Your Votes</Typography>
 					</Box>
 				)}
 			</AppLayout>

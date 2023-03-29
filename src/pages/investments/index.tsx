@@ -83,6 +83,7 @@ export default function Investments() {
 									display: 'flex',
 									justifyContent: 'center',
 									flexDirection: 'column',
+									alignItems: 'center',
 									textAlign: 'center',
 									gap: 2,
 								}}
@@ -100,6 +101,7 @@ export default function Investments() {
 							display: 'flex',
 							justifyContent: 'center',
 							flexDirection: 'column',
+							alignItems: 'center',
 							textAlign: 'center',
 							gap: 2,
 						}}
