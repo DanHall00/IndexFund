@@ -43,57 +43,35 @@ export default function History() {
 				{!voteHistoryIsLoading && !voteHistoryIsFetching ? (
 					voteHistory && !voteHistory.error ? (
 						voteHistory.length > 0 ? (
-							<>
-								{/* <Grid container spacing={3}>
-								{voteHistory.map((item: IVoteDoc) => (
-									<Grid key={item.id} item xs={12}>
-										<Card>
-											<CardHeader
-												title={item.ballot.title}
-												subheader={
-													<Chip label={item.ballot.category} size="small" />
-												}
-												titleTypographyProps={{ mb: 1 }}
-											/>
-											<CardContent>
-												<Typography variant="body1">
-													{item.ballot.description}
-												</Typography>
-											</CardContent>
-										</Card>
-									</Grid>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell>Vote Date</TableCell>
+										<TableCell>Ballot Title</TableCell>
+										<TableCell>Ballot Description</TableCell>
+										<TableCell>Ballot Category</TableCell>
+										<TableCell>Action</TableCell>
+										<TableCell align="right"></TableCell>
+									</TableRow>
+								</TableHead>
+								{voteHistory.map((item: IVoteDoc & { createdAt: string }) => (
+									<TableRow
+										key={item.id}
+										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+									>
+										<TableCell component="th" scope="row">
+											{new Date(item.createdAt).toLocaleDateString()}
+										</TableCell>
+										<TableCell>{item.ballot.title}</TableCell>
+										<TableCell>To add</TableCell>
+										<TableCell>{item.ballot.category}</TableCell>
+										<TableCell>{item.action}</TableCell>
+										<TableCell align="right">
+											<Button variant="contained">View</Button>
+										</TableCell>
+									</TableRow>
 								))}
-							</Grid> */}
-								<Table>
-									<TableHead>
-										<TableRow>
-											<TableCell>Vote Date</TableCell>
-											<TableCell>Ballot Title</TableCell>
-											<TableCell>Ballot Description</TableCell>
-											<TableCell>Ballot Category</TableCell>
-											<TableCell>Action</TableCell>
-											<TableCell align="right"></TableCell>
-										</TableRow>
-									</TableHead>
-									{voteHistory.map((item: IVoteDoc & { createdAt: string }) => (
-										<TableRow
-											key={item.id}
-											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-										>
-											<TableCell component="th" scope="row">
-												{new Date(item.createdAt).toLocaleDateString()}
-											</TableCell>
-											<TableCell>{item.ballot.title}</TableCell>
-											<TableCell>To add</TableCell>
-											<TableCell>{item.ballot.category}</TableCell>
-											<TableCell>{item.action}</TableCell>
-											<TableCell align="right">
-												<Button variant="contained">View</Button>
-											</TableCell>
-										</TableRow>
-									))}
-								</Table>
-							</>
+							</Table>
 						) : (
 							<>
 								<Box
@@ -101,6 +79,7 @@ export default function History() {
 										display: 'flex',
 										justifyContent: 'center',
 										flexDirection: 'column',
+										alignContent: 'center',
 										textAlign: 'center',
 										gap: 2,
 									}}
@@ -125,6 +104,7 @@ export default function History() {
 									display: 'flex',
 									justifyContent: 'center',
 									flexDirection: 'column',
+									alignContent: 'center',
 									textAlign: 'center',
 									gap: 2,
 								}}
