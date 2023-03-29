@@ -31,13 +31,15 @@ const Overview = () => {
 	const router = useRouter();
 	const { data: session } = useSession();
 
-	const [investmentsValue, setInvestmentsValue] = useState<number | null>(null);
+	const [investmentsValue, setInvestmentsValue] = useState<
+		number | null | undefined
+	>(undefined);
 	const [investmentsInitialValue, setInvestmentsInitialValue] = useState<
-		number | null
-	>(null);
+		number | null | undefined
+	>(undefined);
 	const [investmentsTotalAssets, setInvestmentsTotalAssets] = useState<
-		number | null
-	>(null);
+		number | null | undefined
+	>(undefined);
 
 	const { data: userData } = useQuery(['currentUser'], getCurrentUser, {
 		enabled: !!session,
@@ -54,27 +56,33 @@ const Overview = () => {
 
 	useEffect(() => {
 		if (allFunds) {
-			let valueSum: number = allFunds
-				.map((a: IUserFundDoc) => a.value)
-				.reduce(function (a: number, b: number) {
-					return a + b;
-				});
+			if (Array.isArray(allFunds) && allFunds.length > 0) {
+				let valueSum: number = allFunds
+					.map((a: IUserFundDoc) => a.value)
+					.reduce(function (a: number, b: number) {
+						return a + b;
+					});
 
-			let initialValueSum: number = allFunds
-				.map((a: IUserFundDoc) => a.initialValue)
-				.reduce(function (a: number, b: number) {
-					return a + b;
-				});
+				let initialValueSum: number = allFunds
+					.map((a: IUserFundDoc) => a.initialValue)
+					.reduce(function (a: number, b: number) {
+						return a + b;
+					});
 
-			let totalAssets: number = allFunds
-				.map((a: IUserFundDoc) => a.fund.assets.length)
-				.reduce(function (a: number, b: number) {
-					return a + b;
-				});
+				let totalAssets: number = allFunds
+					.map((a: IUserFundDoc) => a.fund.assets.length)
+					.reduce(function (a: number, b: number) {
+						return a + b;
+					});
 
-			setInvestmentsValue(valueSum);
-			setInvestmentsInitialValue(initialValueSum);
-			setInvestmentsTotalAssets(totalAssets);
+				setInvestmentsValue(valueSum);
+				setInvestmentsInitialValue(initialValueSum);
+				setInvestmentsTotalAssets(totalAssets);
+			} else {
+				setInvestmentsValue(null);
+				setInvestmentsInitialValue(null);
+				setInvestmentsTotalAssets(null);
+			}
 		}
 	}, [allFunds]);
 
@@ -88,21 +96,32 @@ const Overview = () => {
 				<Grid container sx={{ mt: 3 }} spacing={3}>
 					<Shortcut
 						title="Investments"
-						description={`Total Holdings: ${investmentsTotalAssets} Assets`}
+						description={
+							investmentsTotalAssets !== undefined
+								? investmentsTotalAssets
+									? `Total Holdings: ${investmentsTotalAssets} Assets`
+									: 'No Assets'
+								: 'Loading Assets'
+						}
 						value={
-							investmentsValue ? (
-								GBPound.format(Number(investmentsValue))
+							investmentsValue !== undefined ? (
+								investmentsValue ? (
+									GBPound.format(Number(investmentsValue))
+								) : (
+									'No Investments'
+								)
 							) : (
 								<Skeleton width="100%" />
 							)
 						}
 						valueProps={{
-							color:
-								Number(investmentsValue) >= Number(investmentsInitialValue)
+							color: investmentsValue
+								? Number(investmentsValue) >= Number(investmentsInitialValue)
 									? Number(investmentsValue) === Number(investmentsInitialValue)
 										? '#FBFBFB'
 										: '#2AA728'
-									: '#DC6262',
+									: '#DC6262'
+								: '#FBFBFB',
 						}}
 						action={() => router.push('/investments')}
 					/>

@@ -1,9 +1,11 @@
+import { Stock } from '@/modules/stocks';
 import { Vote } from '@/modules/votes';
 import {
 	IVoteDoc,
 	UpdateVoteBody,
 	VoteOption,
 } from '@/modules/votes/vote.interfaces';
+import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../lib/mongodb';
@@ -26,13 +28,26 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const vote = await Vote.findOne({
+				const vote: IVoteDoc | null = await Vote.findById<IVoteDoc>({
 					_id: id,
 					user: session.user.id,
-				})
-					.populate('ballot')
-					.sort('desc');
-				return res.status(200).json(vote);
+				}).populate('ballot');
+
+				if (!vote) {
+					return res.status(404).json({ message: 'Could not find vote.' });
+				}
+
+				const stock = await Stock.findById(vote.ballot.stock);
+
+				if (!stock) {
+					return res.status(404).json({ message: 'Could not find stock.' });
+				}
+
+				const votes = await Vote.find({
+					ballot: new mongoose.Types.ObjectId(String(vote.ballot.id)),
+				}).select('action');
+
+				return res.status(200).json({ vote, stock, results: votes });
 			} catch (err) {
 				console.log(err);
 				return res.status(500).json({ message: 'Could not get vote.' });

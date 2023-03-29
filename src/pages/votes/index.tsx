@@ -67,7 +67,12 @@ export default function History() {
 										<TableCell>{item.ballot.category}</TableCell>
 										<TableCell>{item.action}</TableCell>
 										<TableCell align="right">
-											<Button variant="contained">View</Button>
+											<Button
+												variant="contained"
+												onClick={() => router.push(`/votes/${item.id}`)}
+											>
+												View
+											</Button>
 										</TableCell>
 									</TableRow>
 								))}
@@ -85,7 +90,7 @@ export default function History() {
 									}}
 								>
 									<Typography variant="subtitle1">
-										You currently haven&aps;t voted in any ballots, when you do
+										You currently haven&apos;t voted in any ballots, when you do
 										your votes will appear here.
 									</Typography>
 								</Box>

@@ -6,8 +6,8 @@ import {
 import { IStock, UpdateStockBody } from '@/modules/stocks/stock.interfaces';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import dbConnect from '../../../../lib/mongodb';
-import { authOptions } from '../auth/[...nextauth]';
+import dbConnect from '../../../../../lib/mongodb';
+import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(
 	req: NextApiRequest,

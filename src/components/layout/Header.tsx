@@ -17,34 +17,10 @@ import {
 	styled,
 	useTheme,
 } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
-
-const drawerWidth = 240;
-
-interface AppBarProps extends MuiAppBarProps {
-	open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	transition: theme.transitions.create(['width', 'margin'], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	...(open && {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	}),
-}));
+import AppBar from './AppBar';
 
 interface IHeaderProps {
 	drawerState: {
@@ -52,22 +28,31 @@ interface IHeaderProps {
 		setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	};
 	handleDrawerOpen: () => void;
+	drawerWidth: number;
 }
 
 export default function Header({
 	drawerState,
 	handleDrawerOpen,
+	drawerWidth,
 }: IHeaderProps) {
+	const { drawerOpen }: { drawerOpen: boolean } = drawerState;
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 	const router = useRouter();
-	const { drawerOpen }: { drawerOpen: boolean } = drawerState;
-	const [logoutAnchorEl, setLogoutAnchorEl] = useState<HTMLElement | null>(
-		null
-	);
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * ACCOUNT POPOVER FUNCTIONALITY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [accountAnchorEl, setAccountAnchorEl] = useState<HTMLElement | null>(
 		null
 	);
-	const theme = useTheme();
 
 	const handleAccountPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAccountAnchorEl(event.currentTarget);
@@ -78,6 +63,14 @@ export default function Header({
 	};
 	const accountOpen = Boolean(accountAnchorEl);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOGOUT POPOVER FUNCTIONALITY
+	 * ----------------------------------------------------------------------------------
+	 */
+	const [logoutAnchorEl, setLogoutAnchorEl] = useState<HTMLElement | null>(
+		null
+	);
 	const handleLogoutPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setLogoutAnchorEl(event.currentTarget);
 	};
@@ -87,9 +80,19 @@ export default function Header({
 	};
 	const logoutOpen = Boolean(logoutAnchorEl);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RETURN VIEW
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
-			<AppBar position="fixed" open={drawerOpen} color="primary">
+			<AppBar
+				position="fixed"
+				open={drawerOpen}
+				color="primary"
+				drawerWidth={drawerWidth}
+			>
 				<Toolbar sx={{ justifyContent: 'space-between' }}>
 					<Box sx={{ display: 'flex', alignItems: 'center' }}>
 						<IconButton

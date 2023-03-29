@@ -22,9 +22,9 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const votes = await Vote.find({ user: session.user.id }).populate(
-					'ballot'
-				);
+				const votes = await Vote.find({ user: session.user.id })
+					.populate('ballot')
+					.sort('desc');
 				res.status(200).json(votes);
 			} catch (err) {
 				console.log(err);

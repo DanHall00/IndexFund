@@ -1,97 +1,55 @@
 import {
 	AccountBalance,
-	Apps,
 	Business,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 	Dashboard,
 	History as HistoryIcon,
-	People,
-	Person,
-	Schema,
 	ShowChart,
-	TextSnippet,
 } from '@mui/icons-material';
 import {
 	Divider,
 	IconButton,
 	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
 	ListSubheader,
-	Drawer as MuiDrawer,
-	styled,
 	useTheme,
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import React from 'react';
+import Drawer from './Drawer';
+import DrawerHeader from './DrawerHeader';
 import NavButton from './NavButton';
 
-const drawerWidth = 240;
-
-const openedMixin = (theme: any) => ({
-	width: drawerWidth,
-	transition: theme.transitions.create('width', {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.enteringScreen,
-	}),
-	overflowX: 'hidden',
-});
-
-const closedMixin = (theme: any) => ({
-	transition: theme.transitions.create('width', {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	overflowX: 'hidden',
-	width: `calc(${theme.spacing(7)} + 1px)`,
-	[theme.breakpoints.up('sm')]: {
-		width: `calc(${theme.spacing(8)} + 1px)`,
-	},
-});
-
-const Drawer = styled(MuiDrawer, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }: any) => ({
-	width: drawerWidth,
-	flexShrink: 0,
-	whiteSpace: 'nowrap',
-	boxSizing: 'border-box',
-	...(open && {
-		...openedMixin(theme),
-		'& .MuiDrawer-paper': openedMixin(theme),
-	}),
-	...(!open && {
-		...closedMixin(theme),
-		'& .MuiDrawer-paper': closedMixin(theme),
-	}),
-}));
-
 interface INavbarProps {
-	drawerHeader: any;
+	drawerWidth: number;
 	drawerState: {
 		drawerOpen: boolean;
 		setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	};
 	handleDrawerClose: () => void;
-	handleDrawerOpen: () => void;
 }
 
 export default function Navbar({
-	drawerHeader: DrawerHeader,
+	drawerWidth,
 	drawerState,
 	handleDrawerClose,
-	handleDrawerOpen,
 }: INavbarProps) {
-	const { data: session } = useSession();
 	const { drawerOpen } = drawerState;
-
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
+	const { data: session } = useSession();
 	const theme = useTheme();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RETURN VIEW
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
-		<Drawer variant="permanent" open={drawerOpen}>
+		<Drawer variant="permanent" open={drawerOpen} drawerWidth={drawerWidth}>
 			<DrawerHeader>
 				<IconButton onClick={handleDrawerClose}>
 					{theme.direction === 'rtl' ? (
@@ -116,7 +74,7 @@ export default function Navbar({
 					drawerOpen={drawerOpen}
 				/>
 				<NavButton
-					path="history"
+					path="votes"
 					label="Voting History"
 					icon={HistoryIcon}
 					drawerOpen={drawerOpen}
