@@ -1,3 +1,8 @@
+/**
+ * Get User currently logged in
+ *
+ * @return {*}
+ */
 const getCurrentUser = async () => {
 	try {
 		const user = await (
@@ -12,6 +17,11 @@ const getCurrentUser = async () => {
 	}
 };
 
+/**
+ * Get All Users
+ *
+ * @return {*}
+ */
 const getAllUsers = async () => {
 	try {
 		const user = await (

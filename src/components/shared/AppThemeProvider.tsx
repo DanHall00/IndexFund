@@ -7,11 +7,22 @@ import {
 } from '@mui/material/styles';
 import React from 'react';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * GLOBAL COLOURS
+ * ----------------------------------------------------------------------------------
+ */
 const primary = '#E85C27';
 const secondary = '#2f699f';
 
 const background = '#0c0e0f';
 const text = '#f8e5d5';
+
+/*
+ * ----------------------------------------------------------------------------------
+ * CREATE THEME WITH STYLING
+ * ----------------------------------------------------------------------------------
+ */
 
 let innerTheme = createTheme({
 	palette: {
@@ -55,14 +66,41 @@ let innerTheme = createTheme({
 	},
 });
 
+/*
+ * ----------------------------------------------------------------------------------
+ * RESPONSIVE FONTS
+ * ----------------------------------------------------------------------------------
+ */
+
 innerTheme = responsiveFontSizes(innerTheme);
 
-export default function AppThemeProvider(props: { children: React.ReactNode }) {
-	const { children } = props;
+/**
+ * Interface to define the props for AppThemeProvider
+ *
+ * @interface IAppThemeProviderProps
+ */
+interface IAppThemeProviderProps {
+	children: React.ReactNode;
+}
+
+/**
+ * Component for configuring MUI styling to use across the application
+ *
+ * @param {{ children: React.ReactNode }} props
+ * @return {*}
+ */
+const AppThemeProvider = ({ children }: IAppThemeProviderProps) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<ThemeProvider theme={innerTheme}>
 			<CssBaseline />
 			<Box sx={{ display: 'flex' }}>{children}</Box>
 		</ThemeProvider>
 	);
-}
+};
+
+export default AppThemeProvider;

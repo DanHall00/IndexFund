@@ -1,27 +1,15 @@
-import {
-	DarkMode,
-	LightMode,
-	Logout,
-	Menu as MenuIcon,
-	Person,
-	Search,
-} from '@mui/icons-material';
-import {
-	Avatar,
-	Box,
-	Button,
-	IconButton,
-	Popover,
-	Toolbar,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material';
+import { Logout, Menu as MenuIcon, Person } from '@mui/icons-material';
+import { Box, IconButton, Popover, Toolbar, Typography } from '@mui/material';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import AppBar from './AppBar';
 
+/**
+ * Interface to define props for the Header
+ *
+ * @interface IHeaderProps
+ */
 interface IHeaderProps {
 	drawerState: {
 		drawerOpen: boolean;
@@ -31,11 +19,21 @@ interface IHeaderProps {
 	drawerWidth: number;
 }
 
-export default function Header({
+/**
+ * Component for top header bar in page
+ *
+ * @param {IHeaderProps} {
+ * 	drawerState,
+ * 	handleDrawerOpen,
+ * 	drawerWidth,
+ * }
+ * @return {*} React Component
+ */
+const Header = ({
 	drawerState,
 	handleDrawerOpen,
 	drawerWidth,
-}: IHeaderProps) {
+}: IHeaderProps) => {
 	const { drawerOpen }: { drawerOpen: boolean } = drawerState;
 	/*
 	 * ----------------------------------------------------------------------------------
@@ -82,7 +80,7 @@ export default function Header({
 
 	/*
 	 * ----------------------------------------------------------------------------------
-	 * RETURN VIEW
+	 * RENDER COMPONENT
 	 * ----------------------------------------------------------------------------------
 	 */
 	return (
@@ -188,4 +186,6 @@ export default function Header({
 			</AppBar>
 		</>
 	);
-}
+};
+
+export default Header;

@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
-import { customAlphabet } from 'nanoid';
-import { roles } from '../../config/roles';
-import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IUserFundDoc, IUserFundModel } from './fund.interfaces';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * USERFUND SCHEMA
+ * ----------------------------------------------------------------------------------
+ */
 const userFundSchema = new mongoose.Schema<IUserFundDoc, IUserFundModel>(
 	{
 		user: {

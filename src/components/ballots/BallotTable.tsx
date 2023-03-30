@@ -3,16 +3,41 @@ import { Button, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+/**
+ * Interface that defines the props for BallotTable
+ *
+ * @interface IBallotTableProps
+ */
 interface IBallotTableProps {
 	ballots: IBallotDoc[];
 	hideVoteButton?: boolean;
 }
 
+/**
+ * Component to render given ballots into a table
+ *
+ * @param {IBallotTableProps} {
+ * 	ballots,
+ * 	hideVoteButton = false,
+ * }
+ * @return {*} BallotTable Component
+ */
 const BallotTable = ({
 	ballots,
 	hideVoteButton = false,
-}: IBallotTableProps) => {
+}: IBallotTableProps): any => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 
 	return (
 		<Table sx={{ mb: 2 }}>

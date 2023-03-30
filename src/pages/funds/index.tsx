@@ -2,33 +2,37 @@ import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
 import { IFundDoc } from '@/modules/funds/fund.interfaces';
 import { getFunds } from '@/modules/funds/fund.service';
-import {
-	Box,
-	Button,
-	CircularProgress,
-	Grid,
-	Skeleton,
-	Typography,
-} from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-const GBPound = new Intl.NumberFormat(undefined, {
-	style: 'currency',
-	currency: 'GBP',
-});
-
 const Funds = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 	const router = useRouter();
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: allFunds,
 		isLoading: allFundsLoading,
 		isFetching: allFundsFetching,
 	} = useQuery(['funds'], getFunds, { refetchOnWindowFocus: false });
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>

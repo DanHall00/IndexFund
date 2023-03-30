@@ -37,6 +37,12 @@ const closedMixin = (theme: any) => ({
  * ----------------------------------------------------------------------------------
  */
 
+/**
+ * Interface to define props for new styled drawer
+ *
+ * @interface DrawerProps
+ * @extends {MuiDrawerProps}
+ */
 interface DrawerProps extends MuiDrawerProps {
 	open?: boolean;
 	drawerWidth: number;

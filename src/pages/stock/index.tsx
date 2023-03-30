@@ -1,32 +1,72 @@
-import BallotTable from '@/components/ballots/BallotTable';
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
-import { getAvailableBallots } from '@/modules/ballots/ballot.service';
-import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
-import { getUserFunds } from '@/modules/funds/fund.service';
 import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import { getAllStocks } from '@/modules/stocks/stock.service';
 import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * MONEY FORMATTER
+ * ----------------------------------------------------------------------------------
+ */
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
-export default function Stocks() {
-	const router = useRouter();
+/**
+ * Page for /stocks
+ *
+ * @return {*}
+ */
+const Stocks = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: allStocks,
 		isLoading: allStocksLoading,
 		isFetching: allStocksFetching,
 	} = useQuery(['stocks'], getAllStocks, { refetchOnWindowFocus: false });
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * ADMIN ONLT PAGE PROTECTION
+	 * ----------------------------------------------------------------------------------
+	 */
+	if (session?.user.role !== 'admin') {
+		return (
+			<>
+				<Head>
+					<title>Error</title>
+				</Head>
+				<AppLayout>
+					<Typography variant="h2">403 Forbidden</Typography>
+					<Typography variant="subtitle1">
+						You do not have permission to view this page
+					</Typography>
+				</AppLayout>
+			</>
+		);
+	}
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -119,4 +159,6 @@ export default function Stocks() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Stocks;

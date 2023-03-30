@@ -1,25 +1,19 @@
 import BallotTable from '@/components/ballots/BallotTable';
 import AppLayout from '@/components/layout/AppLayout';
-import Shortcut from '@/components/shared/Shortcut';
 import {
 	getAvailableBallots,
 	getUpcomingBallots,
 } from '@/modules/ballots/ballot.service';
-import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
-import { getUserFunds } from '@/modules/funds/fund.service';
-import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-const GBPound = new Intl.NumberFormat(undefined, {
-	style: 'currency',
-	currency: 'GBP',
-});
-
-export default function Ballots() {
-	const router = useRouter();
-
+const Ballots = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: availableBallots,
 		isLoading: availableBallotsLoading,
@@ -36,6 +30,11 @@ export default function Ballots() {
 		refetchOnWindowFocus: false,
 	});
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -165,4 +164,6 @@ export default function Ballots() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Ballots;

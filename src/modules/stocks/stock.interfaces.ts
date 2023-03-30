@@ -1,5 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
-import { QueryResult } from '../paginate/paginate';
+import { Document, Model } from 'mongoose';
 
 export interface IStock {
 	name: string;
@@ -10,11 +9,6 @@ export interface IStock {
 
 export interface IStockDoc extends IStock, Document {}
 
-export interface IStockModel extends Model<IStockDoc> {
-	paginate(
-		filter: Record<string, any>,
-		options: Record<string, any>
-	): Promise<QueryResult>;
-}
+export interface IStockModel extends Model<IStockDoc> {}
 
 export type UpdateStockBody = Partial<IStock>;

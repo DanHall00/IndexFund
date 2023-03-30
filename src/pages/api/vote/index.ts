@@ -25,12 +25,11 @@ export default async function handler(
 				const votes = await Vote.find({ user: session.user.id })
 					.populate({ path: 'ballot', model: Ballot })
 					.sort({ createdAt: 'desc' });
-				res.status(200).json(votes);
+				return res.status(200).json(votes);
 			} catch (err) {
 				console.log(err);
-				res.status(400).json({ message: 'Could not get votes.' });
+				return res.status(400).json({ message: 'Could not get votes.' });
 			}
-			break;
 		case 'POST':
 			const voteBody: IVote = req.body;
 			try {
@@ -79,13 +78,13 @@ export default async function handler(
 					...voteBody,
 					user: new mongoose.Types.ObjectId(session.user.id),
 				});
-				res.status(200).json(vote);
+				return res.status(200).json(vote);
 			} catch (err) {
 				console.log(err);
-				res.status(400).json({ message: 'Could not create vote.' });
+				return res.status(400).json({ message: 'Could not create vote.' });
 			}
 			break;
 		default:
-			res.status(405).json({ message: 'Method not supported.' });
+			return res.status(405).json({ message: 'Method not supported.' });
 	}
 }

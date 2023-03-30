@@ -120,15 +120,15 @@ const Login = () => {
 							setUserData({ ...userData, password: e.target.value });
 						}}
 					/>
-					<LoadingButton
+					<Button
 						type="submit"
 						variant="contained"
 						fullWidth
 						value="Register"
-						loading={isSigningIn}
+						/* loading={isSigningIn} */
 					>
 						Login
-					</LoadingButton>
+					</Button>
 				</Box>
 				<Divider sx={{ my: 2 }} />
 				<Button

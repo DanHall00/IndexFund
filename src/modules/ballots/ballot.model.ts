@@ -1,9 +1,12 @@
-import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { BallotCategory, IBallotDoc, IBallotModel } from './ballot.interfaces';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * BALLOT SCHEMA
+ * ----------------------------------------------------------------------------------
+ */
 const ballotSchema = new mongoose.Schema<IBallotDoc, IBallotModel>(
 	{
 		stock: {

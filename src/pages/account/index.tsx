@@ -5,13 +5,33 @@ import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useQuery } from 'react-query';
 
-export default function Account() {
+/**
+ * Page for /account
+ *
+ * @return {*}
+ */
+const Account = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: userData } = useQuery(['currentuser'], getCurrentUser, {
 		enabled: !!session,
 	});
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -54,4 +74,6 @@ export default function Account() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Account;

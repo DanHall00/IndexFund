@@ -1,7 +1,12 @@
-import mongoose, { Document, Model } from 'mongoose';
-import { QueryResult } from '../paginate/paginate';
+import { Document, Model } from 'mongoose';
 import { IStockDoc } from '../stocks/stock.interfaces';
 
+/**
+ * Categories for ballots
+ *
+ * @export
+ * @enum {number}
+ */
 export enum BallotCategory {
 	REPORTS = 'Reports',
 	ACCOUNTS = 'Accounts',
@@ -13,6 +18,12 @@ export enum BallotCategory {
 	OTHER = 'Other',
 }
 
+/**
+ * Interface to define a ballot
+ *
+ * @export
+ * @interface IBallot
+ */
 export interface IBallot {
 	stock: IStockDoc;
 	title: string;
@@ -22,13 +33,23 @@ export interface IBallot {
 	category: string;
 }
 
+/**
+ * Interface to create a MongoDB document with ballot properties
+ *
+ * @export
+ * @interface IBallotDoc
+ * @extends {IBallot}
+ * @extends {Document}
+ */
 export interface IBallotDoc extends IBallot, Document {}
 
-export interface IBallotModel extends Model<IBallotDoc> {
-	paginate(
-		filter: Record<string, any>,
-		options: Record<string, any>
-	): Promise<QueryResult>;
-}
+/**
+ * Interface to create a model for the BallotDoc
+ *
+ * @export
+ * @interface IBallotModel
+ * @extends {Model<IBallotDoc>}
+ */
+export interface IBallotModel extends Model<IBallotDoc> {}
 
 export type UpdateBallotBody = Partial<IBallot>;

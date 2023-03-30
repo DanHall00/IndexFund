@@ -1,5 +1,4 @@
 import {
-	AppBar,
 	Box,
 	Container,
 	Divider,
@@ -7,16 +6,37 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
-import React, { useCallback } from 'react';
+import React from 'react';
 
+/**
+ * Interface to define props used in AuthLayout
+ *
+ * @interface IAuthLayoutProps
+ */
 interface IAuthLayoutProps {
 	children: React.ReactNode;
 }
 
-export default function AuthLayout({ children }: IAuthLayoutProps) {
+/**
+ * Layout component that wraps Auth pages
+ *
+ * @param {IAuthLayoutProps} { children } Inside Component
+ * @return {*} React Component
+ */
+const AuthLayout = ({ children }: IAuthLayoutProps) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * STYLE HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const theme = useTheme();
 	const isLG = useMediaQuery(theme.breakpoints.up('lg'));
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Box
@@ -73,4 +93,6 @@ export default function AuthLayout({ children }: IAuthLayoutProps) {
 			</Box>
 		</>
 	);
-}
+};
+
+export default AuthLayout;

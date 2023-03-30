@@ -1,24 +1,62 @@
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
-import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import { IUserDoc } from '@/modules/users/user.interfaces';
 import { getAllUsers } from '@/modules/users/user.service';
-import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-export default function Users() {
-	const router = useRouter();
+/**
+ * Page for /user
+ *
+ * @return {*}
+ */
+const Users = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: allUsers,
 		isLoading: allUsersLoading,
 		isFetching: allUsersFetching,
 	} = useQuery(['users'], getAllUsers, { refetchOnWindowFocus: false });
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * ADMIN ONLY ROUTE PROTECTION
+	 * ----------------------------------------------------------------------------------
+	 */
+	if (session?.user.role !== 'admin') {
+		return (
+			<>
+				<Head>
+					<title>Error</title>
+				</Head>
+				<AppLayout>
+					<Typography variant="h2">403 Forbidden</Typography>
+					<Typography variant="subtitle1">
+						You do not have permission to view this page
+					</Typography>
+				</AppLayout>
+			</>
+		);
+	}
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -28,11 +66,6 @@ export default function Users() {
 				<Typography variant="h3" gutterBottom>
 					Users
 				</Typography>
-				<Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
-					<Button variant="contained" onClick={() => {}} color="secondary">
-						Create Stock
-					</Button>
-				</Box>
 				{!allUsersLoading && !allUsersFetching ? (
 					allUsers ? (
 						allUsers.length > 0 ? (
@@ -101,4 +134,6 @@ export default function Users() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Users;

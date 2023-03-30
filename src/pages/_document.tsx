@@ -1,6 +1,16 @@
 import { Head, Html, Main, NextScript } from 'next/document';
 
-export default function Document() {
+/**
+ * NextJS Document Component
+ *
+ * @return {*}
+ */
+const Document = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<Html lang="en">
 			<Head />
@@ -10,4 +20,6 @@ export default function Document() {
 			</body>
 		</Html>
 	);
-}
+};
+
+export default Document;

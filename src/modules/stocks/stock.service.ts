@@ -1,3 +1,8 @@
+/**
+ * Get All Stocks
+ *
+ * @return {*}
+ */
 const getAllStocks = async () => {
 	try {
 		const stocks = await (
