@@ -37,5 +37,4 @@ const ballotSchema = new mongoose.Schema<IBallotDoc>(
 ballotSchema.plugin(toJSON);
 ballotSchema.plugin(paginate);
 
-export default mongoose.models.Ballot ||
-	mongoose.model<IBallotDoc, IBallotModel>('Ballot', ballotSchema);
+export default mongoose.model<IBallotDoc, IBallotModel>('Ballot', ballotSchema);

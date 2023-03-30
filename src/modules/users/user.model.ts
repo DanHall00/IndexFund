@@ -93,5 +93,4 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
-export default mongoose.models.User ||
-	mongoose.model<IUserDoc, IUserModel>('User', userSchema);
+export default mongoose.model<IUserDoc, IUserModel>('User', userSchema);

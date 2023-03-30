@@ -28,5 +28,7 @@ const userFundSchema = new mongoose.Schema<IUserFundDoc>(
 userFundSchema.plugin(toJSON);
 userFundSchema.plugin(paginate);
 
-export default mongoose.models.UserFund ||
-	mongoose.model<IUserFundDoc, IUserFundModel>('UserFund', userFundSchema);
+export default mongoose.model<IUserFundDoc, IUserFundModel>(
+	'UserFund',
+	userFundSchema
+);

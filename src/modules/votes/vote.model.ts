@@ -25,5 +25,4 @@ const voteSchema = new mongoose.Schema<IVoteDoc>(
 voteSchema.plugin(toJSON);
 voteSchema.plugin(paginate);
 
-export default mongoose.models.Vote ||
-	mongoose.model<IVoteDoc, IVoteModel>('Vote', voteSchema);
+export default mongoose.model<IVoteDoc, IVoteModel>('Vote', voteSchema);

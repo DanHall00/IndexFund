@@ -17,5 +17,4 @@ const stockSchema = new mongoose.Schema<IStockDoc>(
 stockSchema.plugin(toJSON);
 stockSchema.plugin(paginate);
 
-export default mongoose.models.Stock ||
-	mongoose.model<IStockDoc, IStockModel>('Stock', stockSchema);
+export default mongoose.model<IStockDoc, IStockModel>('Stock', stockSchema);
