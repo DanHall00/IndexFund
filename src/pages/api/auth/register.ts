@@ -56,12 +56,12 @@ export default async function handler(
 
 				user.save();
 
-				res.status(200).json(user);
+				return res.status(200).json(user);
 			} catch (err) {
 				console.log(err);
-				res.status(400).json({ message: 'Could not create user.' });
+				return res.status(400).json({ message: 'Could not create user.' });
 			}
 		default:
-			res.status(405).json({ message: 'Method not supported.' });
+			return res.status(405).json({ message: 'Method not supported.' });
 	}
 }
