@@ -5,7 +5,7 @@ import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IUserFundDoc, IUserFundModel } from './fund.interfaces';
 
-const userFundSchema = new mongoose.Schema<IUserFundDoc>(
+const userFundSchema = new mongoose.Schema<IUserFundDoc, IUserFundModel>(
 	{
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -26,9 +26,6 @@ const userFundSchema = new mongoose.Schema<IUserFundDoc>(
 );
 
 userFundSchema.plugin(toJSON);
-userFundSchema.plugin(paginate);
 
-export default mongoose.model<IUserFundDoc, IUserFundModel>(
-	'UserFund',
-	userFundSchema
-);
+export default mongoose.models.UserFund ||
+	mongoose.model<IUserFundDoc, IUserFundModel>('UserFund', userFundSchema);

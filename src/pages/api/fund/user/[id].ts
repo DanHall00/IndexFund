@@ -6,6 +6,7 @@ import {
 	IUserFundDoc,
 	UpdateUserFundBody,
 } from '@/modules/funds/fund.interfaces';
+import { Stock } from '@/modules/stocks';
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';

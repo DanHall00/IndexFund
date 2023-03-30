@@ -16,4 +16,5 @@ const fundSchema = new mongoose.Schema<IFundDoc, IFundModel>(
 fundSchema.plugin(toJSON);
 fundSchema.plugin(paginate);
 
-export default mongoose.model<IFundDoc, IFundModel>('Fund', fundSchema);
+export default mongoose.models.Fund ||
+	mongoose.model<IFundDoc, IFundModel>('Fund', fundSchema);

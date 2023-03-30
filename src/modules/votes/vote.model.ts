@@ -3,7 +3,7 @@ import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IVoteDoc, IVoteModel, VoteOption } from './vote.interfaces';
 
-const voteSchema = new mongoose.Schema<IVoteDoc>(
+const voteSchema = new mongoose.Schema<IVoteDoc, IVoteModel>(
 	{
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +23,6 @@ const voteSchema = new mongoose.Schema<IVoteDoc>(
 );
 
 voteSchema.plugin(toJSON);
-voteSchema.plugin(paginate);
 
-export default mongoose.model<IVoteDoc, IVoteModel>('Vote', voteSchema);
+export default mongoose.models.Vote ||
+	mongoose.model<IVoteDoc, IVoteModel>('Vote', voteSchema);

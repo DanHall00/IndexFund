@@ -1,3 +1,4 @@
+import { Ballot } from '@/modules/ballots';
 import { Stock } from '@/modules/stocks';
 import { Vote } from '@/modules/votes';
 import {

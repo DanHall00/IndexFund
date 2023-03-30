@@ -8,7 +8,7 @@ import { IUserDoc, IUserModel } from './user.interfaces';
 
 const nanoid = customAlphabet('123456789', 15);
 
-const userSchema = new mongoose.Schema<IUserDoc>(
+const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
 	{
 		username: {
 			type: String,
@@ -53,7 +53,6 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 );
 
 userSchema.plugin(toJSON);
-userSchema.plugin(paginate);
 
 /**
  * Check if username is taken
@@ -93,4 +92,5 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
-export default mongoose.model<IUserDoc, IUserModel>('User', userSchema);
+export default mongoose.models.User ||
+	mongoose.model<IUserDoc, IUserModel>('User', userSchema);

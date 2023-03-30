@@ -1,7 +1,7 @@
 import { Ballot } from '@/modules/ballots';
-import { IBallot } from '@/modules/ballots/ballot.interfaces';
-import { UserFund } from '@/modules/funds';
+import { Fund, UserFund } from '@/modules/funds';
 import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
+import { Stock } from '@/modules/stocks';
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';

@@ -4,7 +4,7 @@ import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { BallotCategory, IBallotDoc, IBallotModel } from './ballot.interfaces';
 
-const ballotSchema = new mongoose.Schema<IBallotDoc>(
+const ballotSchema = new mongoose.Schema<IBallotDoc, IBallotModel>(
 	{
 		stock: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +35,6 @@ const ballotSchema = new mongoose.Schema<IBallotDoc>(
 );
 
 ballotSchema.plugin(toJSON);
-ballotSchema.plugin(paginate);
 
-export default mongoose.model<IBallotDoc, IBallotModel>('Ballot', ballotSchema);
+export default mongoose.models.Ballot ||
+	mongoose.model<IBallotDoc, IBallotModel>('Ballot', ballotSchema);

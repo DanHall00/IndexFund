@@ -3,6 +3,7 @@ import {
 	IBallotDoc,
 	UpdateBallotBody,
 } from '@/modules/ballots/ballot.interfaces';
+import { Stock } from '@/modules/stocks';
 import { IStock, UpdateStockBody } from '@/modules/stocks/stock.interfaces';
 import { Vote } from '@/modules/votes';
 import { IVoteDoc } from '@/modules/votes/vote.interfaces';

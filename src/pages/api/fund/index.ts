@@ -1,5 +1,6 @@
 import { Fund } from '@/modules/funds';
 import { IFund } from '@/modules/funds/fund.interfaces';
+import { Stock } from '@/modules/stocks';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../lib/mongodb';

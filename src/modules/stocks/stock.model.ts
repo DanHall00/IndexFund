@@ -4,7 +4,7 @@ import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IStockDoc, IStockModel } from './stock.interfaces';
 
-const stockSchema = new mongoose.Schema<IStockDoc>(
+const stockSchema = new mongoose.Schema<IStockDoc, IStockModel>(
 	{
 		name: String,
 		abbreviation: String,
@@ -15,6 +15,6 @@ const stockSchema = new mongoose.Schema<IStockDoc>(
 );
 
 stockSchema.plugin(toJSON);
-stockSchema.plugin(paginate);
 
-export default mongoose.model<IStockDoc, IStockModel>('Stock', stockSchema);
+export default mongoose.models.Stock ||
+	mongoose.model<IStockDoc, IStockModel>('Stock', stockSchema);
