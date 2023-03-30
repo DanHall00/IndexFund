@@ -5,33 +5,42 @@ import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
 import { getUserFunds } from '@/modules/funds/fund.service';
 import { getCurrentUser } from '@/modules/users/user.service';
 import { getVotingHistory } from '@/modules/votes/vote.service';
-import {
-	Button,
-	Card,
-	CardActions,
-	CardContent,
-	CardHeader,
-	Grid,
-	Skeleton,
-	Typography,
-} from '@mui/material';
-import { getServerSession } from 'next-auth';
+import { Grid, Skeleton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { QueryClient, dehydrate, useQuery } from 'react-query';
-import { authOptions } from './api/auth/[...nextauth]';
+import { useQuery } from 'react-query';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * MONEY FORMATTER
+ * ----------------------------------------------------------------------------------
+ */
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
+/**
+ * Page for /
+ *
+ * @return {*}
+ */
 const Overview = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { data: session } = useSession();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATE
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [investmentsValue, setInvestmentsValue] = useState<
 		number | null | undefined
 	>(undefined);
@@ -42,6 +51,11 @@ const Overview = () => {
 		number | null | undefined
 	>(undefined);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: userData } = useQuery(['currentUser'], getCurrentUser, {
 		enabled: !!session,
 		refetchOnWindowFocus: false,
@@ -63,21 +77,31 @@ const Overview = () => {
 		}
 	);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * EFFECTS
+	 * ----------------------------------------------------------------------------------
+	 */
 	useEffect(() => {
+		// Check if funds
 		if (allFunds) {
+			// Check that the funds are an array
 			if (Array.isArray(allFunds) && allFunds.length > 0) {
+				// Calculate total value of fund
 				let valueSum: number = allFunds
 					.map((a: IUserFundDoc) => a.value)
 					.reduce(function (a: number, b: number) {
 						return a + b;
 					});
 
+				// Calculate total initial value
 				let initialValueSum: number = allFunds
 					.map((a: IUserFundDoc) => a.initialValue)
 					.reduce(function (a: number, b: number) {
 						return a + b;
 					});
 
+				// Calculate count of assets
 				let totalAssets: number = allFunds
 					.map((a: IUserFundDoc) => a.fund.assets.length)
 					.reduce(function (a: number, b: number) {
@@ -95,6 +119,11 @@ const Overview = () => {
 		}
 	}, [allFunds]);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>

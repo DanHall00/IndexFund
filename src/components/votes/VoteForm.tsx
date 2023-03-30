@@ -1,4 +1,3 @@
-import { IVoteDoc } from '@/modules/votes/vote.interfaces';
 import { createVote } from '@/modules/votes/vote.service';
 import {
 	Box,
@@ -7,23 +6,45 @@ import {
 	FormControlLabel,
 	Radio,
 	RadioGroup,
-	Table,
-	TableCell,
-	TableHead,
-	TableRow,
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
+/**
+ * Interface to define props for VoteForm
+ *
+ * @interface IVoteFormProps
+ */
 interface IVoteFormProps {
 	ballotId: string;
 }
 
+/**
+ * Component for providing a user the ability to vote on a ballot
+ *
+ * @param {IVoteFormProps} { ballotId }
+ * @return {*}
+ */
 const VoteForm = ({ ballotId }: IVoteFormProps) => {
-	const [vote, setVote] = useState('Abstain');
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const queryClient = useQueryClient();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATE
+	 * ----------------------------------------------------------------------------------
+	 */
+	const [vote, setVote] = useState('Abstain');
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const createVoteMutation = useMutation({
 		mutationFn: createVote,
 		onSuccess: () => {
@@ -31,6 +52,12 @@ const VoteForm = ({ ballotId }: IVoteFormProps) => {
 			queryClient.invalidateQueries({ queryKey: ['ballot', ballotId] });
 		},
 	});
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HANDLERS
+	 * ----------------------------------------------------------------------------------
+	 */
 
 	const submitForm = async (e: React.FormEvent<HTMLDivElement>) => {
 		e.preventDefault();
@@ -46,6 +73,11 @@ const VoteForm = ({ ballotId }: IVoteFormProps) => {
 		}
 	};
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<Box
 			component="form"

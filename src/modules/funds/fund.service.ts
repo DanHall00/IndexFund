@@ -1,16 +1,13 @@
-const getFunds = async () => {
-	try {
-		const funds = await (
-			await fetch(`/api/fund`, {
-				headers: { 'Content-Type': 'application/json' },
-			})
-		).json();
-		return funds;
-	} catch (e) {
-		return { error: 'Could not load funds.' };
-	}
-};
-
+/**
+ * Create a new user fund
+ *
+ * @param {{
+ * 	fund: string;
+ * 	initialValue: number;
+ * 	value: number;
+ * }} updateBody
+ * @return {*}
+ */
 const createUserFund = async (updateBody: {
 	fund: string;
 	initialValue: number;
@@ -30,6 +27,49 @@ const createUserFund = async (updateBody: {
 	}
 };
 
+/**
+ * Get a fund by an ID
+ *
+ * @param {*} id
+ * @return {*}
+ */
+const getFundById = async (id: any) => {
+	try {
+		const fund = await (
+			await fetch(`/api/fund/${id}`, {
+				headers: { 'Content-Type': 'application/json' },
+			})
+		).json();
+		return fund;
+	} catch (e) {
+		return { error: 'Could not load fund.' };
+	}
+};
+
+/**
+ * Get all funds
+ *
+ * @return {*}
+ */
+const getFunds = async () => {
+	try {
+		const funds = await (
+			await fetch(`/api/fund`, {
+				headers: { 'Content-Type': 'application/json' },
+			})
+		).json();
+		return funds;
+	} catch (e) {
+		return { error: 'Could not load funds.' };
+	}
+};
+
+/**
+ * Get a UserFund by id
+ *
+ * @param {*} id
+ * @return {*}
+ */
 const getUserFundById = async (id: any) => {
 	try {
 		const fund = await (
@@ -43,6 +83,11 @@ const getUserFundById = async (id: any) => {
 	}
 };
 
+/**
+ * Get all UserFunds for a user
+ *
+ * @return {*}
+ */
 const getUserFunds = async () => {
 	try {
 		const funds = await (
@@ -53,19 +98,6 @@ const getUserFunds = async () => {
 		return funds;
 	} catch (e) {
 		return { error: 'Could not load funds.' };
-	}
-};
-
-const getFundById = async (id: any) => {
-	try {
-		const fund = await (
-			await fetch(`/api/fund/${id}`, {
-				headers: { 'Content-Type': 'application/json' },
-			})
-		).json();
-		return fund;
-	} catch (e) {
-		return { error: 'Could not load fund.' };
 	}
 };
 

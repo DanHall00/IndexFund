@@ -10,6 +10,12 @@ import {
  * ----------------------------------------------------------------------------------
  */
 
+/**
+ * Interface that defines the props for the styled appbar
+ *
+ * @interface AppBarProps
+ * @extends {MuiAppBarProps}
+ */
 interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
 	drawerWidth: number;

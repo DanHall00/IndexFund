@@ -4,20 +4,12 @@ import Close from '@mui/icons-material/Close';
 import {
 	Box,
 	Button,
-	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	FormControl,
 	IconButton,
 	InputAdornment,
-	InputLabel,
-	ListItemText,
-	MenuItem,
-	Modal,
-	OutlinedInput,
-	Select,
 	TextField,
 } from '@mui/material';
 import React, {
@@ -26,27 +18,65 @@ import React, {
 	useImperativeHandle,
 	useState,
 } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
-type InvestModalProps = {};
+/**
+ * Interface that defines the props in InvestModal
+ *
+ * @interface InvestModalProps
+ */
+interface InvestModalProps {}
 
-type InvestModalHandle = {
+/**
+ * Interface that defines the methods that can be used from a ref of InvestModal
+ *
+ * @interface InvestModalHandle
+ */
+interface InvestModalHandle {
 	handleOpenModal: (_fund: IFundDoc) => void;
-};
+}
 
+/**
+ * Component for rendering the investment modal
+ *
+ * @param {*} props generic react props
+ * @param {*} ref forward reference of the component
+ * @return {*} Component
+ */
 const InvestModal: ForwardRefRenderFunction<
 	InvestModalHandle,
 	InvestModalProps
 > = (props, ref) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const queryClient = useQueryClient();
-	const [open, setOpen] = useState(false);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATE
+	 * ----------------------------------------------------------------------------------
+	 */
+	const [open, setOpen] = useState(false);
 	const [fund, setFund] = useState<IFundDoc | null>(null);
 	const [value, setValue] = useState<number>(100);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT-QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const createApplication = useMutation({
 		mutationFn: createUserFund,
 	});
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HANDLING METHODS
+	 * ----------------------------------------------------------------------------------
+	 */
 
 	const handleOpenModal = (_fund: IFundDoc) => {
 		setFund(_fund);
@@ -80,9 +110,21 @@ const InvestModal: ForwardRefRenderFunction<
 		}
 	};
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * METHOD EXPORT
+	 * ----------------------------------------------------------------------------------
+	 */
+
 	useImperativeHandle(ref, () => ({
 		handleOpenModal,
 	}));
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 
 	return (
 		<Dialog onClose={handleCloseModal} open={open} fullWidth maxWidth="xs">

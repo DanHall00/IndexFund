@@ -22,6 +22,11 @@ import Drawer from './Drawer';
 import DrawerHeader from './DrawerHeader';
 import NavButton from './NavButton';
 
+/**
+ * Interface to defined props for Navbar
+ *
+ * @interface INavbarProps
+ */
 interface INavbarProps {
 	drawerWidth: number;
 	drawerState: {
@@ -31,11 +36,21 @@ interface INavbarProps {
 	handleDrawerClose: () => void;
 }
 
-export default function Navbar({
+/**
+ * Component for the application side navigation bar
+ *
+ * @param {INavbarProps} {
+ * 	drawerWidth,
+ * 	drawerState,
+ * 	handleDrawerClose,
+ * }
+ * @return {*}
+ */
+const Navbar = ({
 	drawerWidth,
 	drawerState,
 	handleDrawerClose,
-}: INavbarProps) {
+}: INavbarProps) => {
 	const { drawerOpen } = drawerState;
 	/*
 	 * ----------------------------------------------------------------------------------
@@ -47,7 +62,7 @@ export default function Navbar({
 
 	/*
 	 * ----------------------------------------------------------------------------------
-	 * RETURN VIEW
+	 * RENDER COMPONENT
 	 * ----------------------------------------------------------------------------------
 	 */
 	return (
@@ -123,4 +138,6 @@ export default function Navbar({
 			)}
 		</Drawer>
 	);
-}
+};
+
+export default Navbar;

@@ -1,24 +1,28 @@
-import {
-	AppBar,
-	Box,
-	Container,
-	Toolbar,
-	styled,
-	useMediaQuery,
-	useTheme,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import DrawerHeader from './DrawerHeader';
 import Header from './Header';
 import Navbar from './Navbar';
 
+/**
+ * Interface that defines the props for AppLayout
+ *
+ * @interface IAppLayoutProps
+ */
 interface IAppLayoutProps {
 	children: React.ReactNode;
 }
 
+// Hard coded drawer width
 const drawerWidth = 240;
 
-export default function AppLayout({ children }: IAppLayoutProps) {
+/**
+ * Layout component that wraps app pages
+ *
+ * @param {IAppLayoutProps} { children } Inside components
+ * @return {*} React Component
+ */
+const AppLayout = ({ children }: IAppLayoutProps) => {
 	/*
 	 * ----------------------------------------------------------------------------------
 	 * DRAWER FUNCTIONALITY
@@ -36,7 +40,7 @@ export default function AppLayout({ children }: IAppLayoutProps) {
 
 	/*
 	 * ----------------------------------------------------------------------------------
-	 * RETURN VIEW
+	 * RENDER COMPONENT
 	 * ----------------------------------------------------------------------------------
 	 */
 	return (
@@ -68,4 +72,6 @@ export default function AppLayout({ children }: IAppLayoutProps) {
 			</Box>
 		</>
 	);
-}
+};
+
+export default AppLayout;

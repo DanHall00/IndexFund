@@ -6,6 +6,12 @@ export default withAuth({
 	},
 });
 
+/*
+ * ----------------------------------------------------------------------------------
+ * DEFINE PAGES WHICH REQUIRE AUTHENTICATION
+ * ----------------------------------------------------------------------------------
+ */
+
 export const config = {
 	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|login|register).*)'],
 };

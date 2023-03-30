@@ -1,59 +1,58 @@
 import AppLayout from '@/components/layout/AppLayout';
-import Shortcut from '@/components/shared/Shortcut';
 import VoteChart from '@/components/votes/VoteChart';
 import VoteForm from '@/components/votes/VoteForm';
 import { IBallotDoc } from '@/modules/ballots/ballot.interfaces';
 import { getBallotById } from '@/modules/ballots/ballot.service';
-import { IFundDoc } from '@/modules/funds/fund.interfaces';
-import { getFundById } from '@/modules/funds/fund.service';
-import { IStockDoc } from '@/modules/stocks/stock.interfaces';
-import { IVoteDoc, VoteOption } from '@/modules/votes/vote.interfaces';
-import { createVote, getVoteById } from '@/modules/votes/vote.service';
+import { VoteOption } from '@/modules/votes/vote.interfaces';
+import { createVote } from '@/modules/votes/vote.service';
 import { ArrowBack } from '@mui/icons-material';
 import {
 	Box,
-	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	Chip,
 	CircularProgress,
-	FormControl,
-	FormControlLabel,
-	FormLabel,
 	Grid,
 	IconButton,
-	Radio,
-	RadioGroup,
 	Skeleton,
 	Typography,
 } from '@mui/material';
-import {
-	BarElement,
-	CategoryScale,
-	Chart as ChartJS,
-	Legend,
-	LinearScale,
-	Title,
-	Tooltip,
-} from 'chart.js';
-import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * Money Formatter
+ * ----------------------------------------------------------------------------------
+ */
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
+/**
+ * Page for /ballots/[id]
+ *
+ * @return {*}
+ */
 const Ballot = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { id } = router.query;
 	const queryClient = useQueryClient();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATE
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [ballotStatus, setBallotStatus] = useState<string | null>(null);
 	const [voteResults, setVoteResults] = useState<{
 		For: number;
@@ -67,6 +66,12 @@ const Ballot = () => {
 		['No Vote']: 0,
 	});
 	const [currentDate, setCurrentDate] = useState(new Date());
+
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 
 	const {
 		data: ballot,
@@ -91,7 +96,15 @@ const Ballot = () => {
 		},
 	});
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * EFFECTS
+	 * ----------------------------------------------------------------------------------
+	 */
+
 	useEffect(() => {
+		// Determine the status of the vote
+		// TODO : Move this to a central location
 		if (ballot?.ballot) {
 			setBallotStatus(
 				new Date(ballot.ballot.ballotStart) < currentDate
@@ -101,11 +114,14 @@ const Ballot = () => {
 					: 'Not Yet Started'
 			);
 		}
-	}, [ballot]);
+	}, [ballot]); // Ignore warning, not needed on currentDate state
 
 	useEffect(() => {
+		// Make sure there is a ballot
 		if (ballot && ballotStatus) {
+			// Check if the user has voted
 			if (ballot?.vote && ballot?.vote !== VoteOption.NO_VOTE) {
+				// Generate voting data  to display in chart
 				if (ballot?.votes) {
 					if (Array.isArray(ballot.votes)) {
 						const localResults: any = {
@@ -124,6 +140,7 @@ const Ballot = () => {
 					}
 				}
 			} else {
+				// If the vote is in progress, and the user has not voted. Force a "No Vote" vote
 				if (ballotStatus === 'In Progress') {
 					const voteBody = {
 						ballot: ballot?.ballot.id,
@@ -138,8 +155,13 @@ const Ballot = () => {
 				}
 			}
 		}
-	}, [ballot, ballotStatus]);
+	}, [ballot, ballotStatus]); // Ignore warning, doesn't need to be done on voting
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>

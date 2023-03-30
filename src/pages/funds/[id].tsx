@@ -11,7 +11,6 @@ import {
 	CircularProgress,
 	Grid,
 	IconButton,
-	Skeleton,
 	Typography,
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
@@ -20,20 +19,44 @@ import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useQuery } from 'react-query';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * MONEY FORMATTER
+ * ----------------------------------------------------------------------------------
+ */
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
+/**
+ * Page for /fund/[id]
+ *
+ * @return {*}
+ */
 const Fund = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 	const router = useRouter();
 	const { id } = router.query;
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * MODAL REFS
+	 * ----------------------------------------------------------------------------------
+	 */
 	type InvestModalHandle = React.ElementRef<typeof InvestModal>;
-
 	const investModalRef = useRef<InvestModalHandle>(null);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: fund,
 		isLoading: fundLoading,
@@ -47,6 +70,11 @@ const Fund = () => {
 		}
 	);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>

@@ -2,12 +2,17 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import { customAlphabet } from 'nanoid';
 import { roles } from '../../config/roles';
-import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IUserDoc, IUserModel } from './user.interfaces';
 
+// Account Number Alphabet
 const nanoid = customAlphabet('123456789', 15);
 
+/*
+ * ----------------------------------------------------------------------------------
+ * USER SCHEMA
+ * ----------------------------------------------------------------------------------
+ */
 const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
 	{
 		username: {

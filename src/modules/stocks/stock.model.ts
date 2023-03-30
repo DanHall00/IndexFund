@@ -1,9 +1,12 @@
-import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IStockDoc, IStockModel } from './stock.interfaces';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * STOCK SCHEMA
+ * ----------------------------------------------------------------------------------
+ */
 const stockSchema = new mongoose.Schema<IStockDoc, IStockModel>(
 	{
 		name: String,

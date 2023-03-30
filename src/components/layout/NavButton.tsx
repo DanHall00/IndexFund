@@ -5,29 +5,53 @@ import {
 	ListItemText,
 	Popover,
 	Typography,
-	useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-export interface INavButton {
+/**
+ * Interface to define props for NavButton
+ *
+ * @interface INavButtonProps
+ */
+interface INavButtonProps {
 	path: string;
 	label: string;
 	icon: any;
 	drawerOpen: boolean;
 }
 
-export default function NavButton({
+/**
+ * Component for rendering a button with active styling in navigation list
+ *
+ * @param {INavButtonProps} {
+ * 	path,
+ * 	label,
+ * 	icon: Icon,
+ * 	drawerOpen,
+ * }
+ * @return {*}
+ */
+const NavButton = ({
 	path,
 	label,
 	icon: Icon,
 	drawerOpen,
-}: INavButton) {
-	const theme = useTheme();
+}: INavButtonProps) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { pathname, push } = useRouter();
-
+	// Get the current active page
 	const activePath = pathname.split('/')[1].split('/')[0];
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * POPOVER STATE AND HANDLERS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 	const open = Boolean(anchorEl);
 
@@ -39,6 +63,11 @@ export default function NavButton({
 		setAnchorEl(null);
 	};
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<ListItem disablePadding sx={{ display: 'block' }}>
@@ -120,4 +149,6 @@ export default function NavButton({
 			)}
 		</>
 	);
-}
+};
+
+export default NavButton;

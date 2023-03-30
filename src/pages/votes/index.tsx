@@ -1,29 +1,21 @@
 import AppLayout from '@/components/layout/AppLayout';
-import Shortcut from '@/components/shared/Shortcut';
 import VoteTable from '@/components/votes/VoteTable';
-import { IVoteDoc } from '@/modules/votes/vote.interfaces';
 import { getVotingHistory } from '@/modules/votes/vote.service';
-import {
-	Box,
-	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	Chip,
-	CircularProgress,
-	Grid,
-	Table,
-	TableCell,
-	TableHead,
-	TableRow,
-	Typography,
-} from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-export default function History() {
-	const router = useRouter();
+/**
+ * Page for /votes
+ *
+ * @return {*}
+ */
+const Votes = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: voteHistory,
 		isLoading: voteHistoryIsLoading,
@@ -32,6 +24,11 @@ export default function History() {
 		refetchOnWindowFocus: false,
 	});
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -101,4 +98,6 @@ export default function History() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Votes;

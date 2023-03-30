@@ -1,24 +1,41 @@
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
-import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import { IUserDoc } from '@/modules/users/user.interfaces';
 import { getAllUsers } from '@/modules/users/user.service';
-import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-export default function Users() {
-	const router = useRouter();
+/**
+ * Page for /user
+ *
+ * @return {*}
+ */
+const Users = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const { data: session } = useSession();
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: allUsers,
 		isLoading: allUsersLoading,
 		isFetching: allUsersFetching,
 	} = useQuery(['users'], getAllUsers, { refetchOnWindowFocus: false });
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * ADMIN ONLY ROUTE PROTECTION
+	 * ----------------------------------------------------------------------------------
+	 */
 	if (session?.user.role !== 'admin') {
 		return (
 			<>
@@ -35,6 +52,11 @@ export default function Users() {
 		);
 	}
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -112,4 +134,6 @@ export default function Users() {
 			</AppLayout>
 		</>
 	);
-}
+};
+
+export default Users;

@@ -1,15 +1,18 @@
 import {
-	Box,
 	Button,
 	Card,
 	CardActions,
 	CardContent,
 	CardHeader,
 	Grid,
-	Typography,
 } from '@mui/material';
 import React from 'react';
 
+/**
+ * Interface to define props for Shortcut
+ *
+ * @interface IShortcutProps
+ */
 interface IShortcutProps {
 	title: string;
 	description?: string;
@@ -20,7 +23,21 @@ interface IShortcutProps {
 	actionColor?: any;
 }
 
-export default function Shortcut({
+/**
+ * Component to show data within an MUI card across the application
+ *
+ * @param {IShortcutProps} {
+ * 	title,
+ * 	description,
+ * 	value,
+ * 	valueProps,
+ * 	action,
+ * 	actionLabel = 'View Details',
+ * 	actionColor = 'secondary',
+ * }
+ * @return {*}
+ */
+const Shortcut = ({
 	title,
 	description,
 	value,
@@ -28,7 +45,12 @@ export default function Shortcut({
 	action,
 	actionLabel = 'View Details',
 	actionColor = 'secondary',
-}: IShortcutProps) {
+}: IShortcutProps) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<Grid item xs={12} md={6} lg={3}>
 			<Card
@@ -72,4 +94,6 @@ export default function Shortcut({
 			</Card>
 		</Grid>
 	);
-}
+};
+
+export default Shortcut;

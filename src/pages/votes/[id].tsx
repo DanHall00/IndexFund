@@ -1,8 +1,5 @@
 import AppLayout from '@/components/layout/AppLayout';
-import Shortcut from '@/components/shared/Shortcut';
 import VoteChart from '@/components/votes/VoteChart';
-import { IFundDoc } from '@/modules/funds/fund.interfaces';
-import { getFundById } from '@/modules/funds/fund.service';
 import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import { IVoteDoc } from '@/modules/votes/vote.interfaces';
 import { getVoteById } from '@/modules/votes/vote.service';
@@ -18,21 +15,40 @@ import {
 	Skeleton,
 	Typography,
 } from '@mui/material';
-import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * MONEY FORMATTER
+ * ----------------------------------------------------------------------------------
+ */
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
+/**
+ * Page /votes/[id]
+ *
+ * @return {*}
+ */
 const Vote = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { id } = router.query;
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATE
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [voteResults, setVoteResults] = useState<{
 		For: number;
 		Against: number;
@@ -46,6 +62,11 @@ const Vote = () => {
 	});
 	const [currentDate, setCurrentDate] = useState(new Date());
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: vote,
 		isLoading: voteLoading,
@@ -59,6 +80,11 @@ const Vote = () => {
 		}
 	);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * EFFECTS
+	 * ----------------------------------------------------------------------------------
+	 */
 	useEffect(() => {
 		if (vote) {
 			if (Array.isArray(vote.results)) {
@@ -79,6 +105,11 @@ const Vote = () => {
 		}
 	}, [vote]);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>

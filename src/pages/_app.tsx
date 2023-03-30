@@ -2,7 +2,18 @@ import Providers from '@/components/shared/Providers';
 import type { AppProps } from 'next/app';
 import { Hydrate } from 'react-query';
 
-export default function App({ Component, pageProps }: AppProps) {
+/**
+ * NextJS App Component
+ *
+ * @param {AppProps} { Component, pageProps }
+ * @return {*}
+ */
+const App = ({ Component, pageProps }: AppProps) => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<Providers>
 			<Hydrate state={pageProps.dehydratedState}>
@@ -10,4 +21,6 @@ export default function App({ Component, pageProps }: AppProps) {
 			</Hydrate>
 		</Providers>
 	);
-}
+};
+
+export default App;

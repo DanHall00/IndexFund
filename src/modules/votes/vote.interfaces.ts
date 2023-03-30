@@ -1,8 +1,13 @@
-import mongoose, { Document, Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { IBallotDoc } from '../ballots/ballot.interfaces';
-import { QueryResult } from '../paginate/paginate';
 import { IUserDoc } from '../users/user.interfaces';
 
+/**
+ * Voting Options
+ *
+ * @export
+ * @enum {number}
+ */
 export enum VoteOption {
 	FOR = 'For',
 	AGAINST = 'Against',
@@ -10,19 +15,35 @@ export enum VoteOption {
 	NO_VOTE = 'No Vote',
 }
 
+/**
+ * Interface to define properties in a vote
+ *
+ * @export
+ * @interface IVote
+ */
 export interface IVote {
 	user: IUserDoc;
 	ballot: IBallotDoc;
 	action: string;
 }
 
+/**
+ * Interface to add Vote to a MongoDB Document
+ *
+ * @export
+ * @interface IVoteDoc
+ * @extends {IVote}
+ * @extends {Document}
+ */
 export interface IVoteDoc extends IVote, Document {}
 
-export interface IVoteModel extends Model<IVoteDoc> {
-	paginate(
-		filter: Record<string, any>,
-		options: Record<string, any>
-	): Promise<QueryResult>;
-}
+/**
+ * Interface to create a Model for Vote
+ *
+ * @export
+ * @interface IVoteModel
+ * @extends {Model<IVoteDoc>}
+ */
+export interface IVoteModel extends Model<IVoteDoc> {}
 
 export type UpdateVoteBody = Partial<IVote>;

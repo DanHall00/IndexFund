@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
-import { paginate } from '../paginate';
 import { toJSON } from '../toJSON';
 import { IVoteDoc, IVoteModel, VoteOption } from './vote.interfaces';
 
+/*
+ * ----------------------------------------------------------------------------------
+ * VOTE SCHEMA
+ * ----------------------------------------------------------------------------------
+ */
 const voteSchema = new mongoose.Schema<IVoteDoc, IVoteModel>(
 	{
 		user: {

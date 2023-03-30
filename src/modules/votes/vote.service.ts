@@ -1,3 +1,8 @@
+/**
+ * Get a users voting history
+ *
+ * @return {*}
+ */
 const getVotingHistory = async () => {
 	try {
 		const votes = await (
@@ -11,6 +16,12 @@ const getVotingHistory = async () => {
 	}
 };
 
+/**
+ * Get a vote from an ID
+ *
+ * @param {*} id
+ * @return {*}
+ */
 const getVoteById = async (id: any) => {
 	try {
 		const vote = await (
@@ -24,6 +35,12 @@ const getVoteById = async (id: any) => {
 	}
 };
 
+/**
+ * Create a new vote for a user
+ *
+ * @param {{ ballot: string; action: string }} updateBody
+ * @return {*}
+ */
 const createVote = async (updateBody: { ballot: string; action: string }) => {
 	try {
 		const vote = await (

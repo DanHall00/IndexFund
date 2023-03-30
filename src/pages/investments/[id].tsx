@@ -3,37 +3,51 @@ import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
 import { IBallotDoc } from '@/modules/ballots/ballot.interfaces';
 import { IFundDoc, IUserFundDoc } from '@/modules/funds/fund.interfaces';
-import { getFundById, getUserFundById } from '@/modules/funds/fund.service';
+import { getUserFundById } from '@/modules/funds/fund.service';
 import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import { ArrowBack } from '@mui/icons-material';
 import {
 	Box,
-	Button,
 	CircularProgress,
 	Grid,
 	IconButton,
 	Skeleton,
-	Table,
-	TableCell,
-	TableHead,
-	TableRow,
 	Typography,
 } from '@mui/material';
-import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
+
+/*
+ * ----------------------------------------------------------------------------------
+ * MONEY FORMATTER
+ * ----------------------------------------------------------------------------------
+ */
 
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
 	currency: 'GBP',
 });
 
-const Fund = () => {
-	const { data: session } = useSession();
+/**
+ * Page for /investments/[id]
+ *
+ * @return {*}
+ */
+const Investment = () => {
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * HOOKS
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { id } = router.query;
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * REACT QUERY
+	 * ----------------------------------------------------------------------------------
+	 */
 	const {
 		data: investment,
 		isLoading: investmentLoading,
@@ -47,6 +61,11 @@ const Fund = () => {
 		enabled: !!id,
 	});
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * RENDER COMPONENT
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
 			<Head>
@@ -280,4 +299,4 @@ const Fund = () => {
 	);
 };
 
-export default Fund;
+export default Investment;
