@@ -102,7 +102,7 @@ const Overview = () => {
 			</Head>
 			<AppLayout>
 				<Typography variant="h3">Overview</Typography>
-				<Grid container sx={{ mt: 3 }} spacing={3}>
+				<Grid container sx={{ mt: 3 }} spacing={3} justifyContent="center">
 					<Shortcut
 						title="Investments"
 						description={
@@ -156,6 +156,20 @@ const Overview = () => {
 							userData ? (
 								userData.balance ? (
 									GBPound.format(Number(userData.balance))
+								) : (
+									'Could not load.'
+								)
+							) : (
+								<Skeleton width="100%" />
+							)
+						}
+					/>
+					<Shortcut
+						title="Total Value"
+						value={
+							userData && investmentsValue !== undefined ? (
+								userData.balance && investmentsValue ? (
+									GBPound.format(Number(userData.balance + investmentsValue))
 								) : (
 									'Could not load.'
 								)

@@ -19,6 +19,22 @@ export default function Users() {
 		isFetching: allUsersFetching,
 	} = useQuery(['users'], getAllUsers, { refetchOnWindowFocus: false });
 
+	if (session?.user.role !== 'admin') {
+		return (
+			<>
+				<Head>
+					<title>Error</title>
+				</Head>
+				<AppLayout>
+					<Typography variant="h2">403 Forbidden</Typography>
+					<Typography variant="subtitle1">
+						You do not have permission to view this page
+					</Typography>
+				</AppLayout>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Head>
@@ -28,11 +44,6 @@ export default function Users() {
 				<Typography variant="h3" gutterBottom>
 					Users
 				</Typography>
-				<Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
-					<Button variant="contained" onClick={() => {}} color="secondary">
-						Create Stock
-					</Button>
-				</Box>
 				{!allUsersLoading && !allUsersFetching ? (
 					allUsers ? (
 						allUsers.length > 0 ? (

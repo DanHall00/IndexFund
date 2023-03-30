@@ -27,6 +27,22 @@ export default function Stocks() {
 		isFetching: allStocksFetching,
 	} = useQuery(['stocks'], getAllStocks, { refetchOnWindowFocus: false });
 
+	if (session?.user.role !== 'admin') {
+		return (
+			<>
+				<Head>
+					<title>Error</title>
+				</Head>
+				<AppLayout>
+					<Typography variant="h2">403 Forbidden</Typography>
+					<Typography variant="subtitle1">
+						You do not have permission to view this page
+					</Typography>
+				</AppLayout>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Head>
