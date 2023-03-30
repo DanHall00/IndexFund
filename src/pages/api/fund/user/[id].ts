@@ -7,6 +7,7 @@ import {
 	UpdateUserFundBody,
 } from '@/modules/funds/fund.interfaces';
 import { Stock } from '@/modules/stocks';
+import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
@@ -38,7 +39,7 @@ export default async function handler(
 
 				const fund: IFundDoc | null = await Fund.findById<IFundDoc>(
 					userFund.fund
-				).populate('assets');
+				).populate({ path: 'assets', model: Stock });
 
 				if (!fund) {
 					return res.status(404).json({ message: 'Could not find fund.' });
@@ -51,7 +52,7 @@ export default async function handler(
 						),
 					},
 				})
-					.populate('stock')
+					.populate({ path: 'stock', model: Stock })
 					.sort({ ballotStart: 'desc' });
 
 				return res.status(200).json({ userFund: userFund, fund, ballots });

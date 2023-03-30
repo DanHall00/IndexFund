@@ -21,7 +21,10 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const funds = await Fund.find({}).populate('assets');
+				const funds = await Fund.find({}).populate({
+					path: 'assets',
+					model: Stock,
+				});
 				res.status(200).json(funds);
 			} catch (err) {
 				console.log(err);

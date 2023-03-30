@@ -1,7 +1,8 @@
 import { Ballot } from '@/modules/ballots';
 import { Fund, UserFund } from '@/modules/funds';
-import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
+import { IFundDoc, IUserFundDoc } from '@/modules/funds/fund.interfaces';
 import { Stock } from '@/modules/stocks';
+import { IStockDoc } from '@/modules/stocks/stock.interfaces';
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
@@ -23,9 +24,9 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const userFunds: IUserFundDoc[] = await UserFund.find({
+				const userFunds: any[] = await UserFund.find({
 					user: new mongoose.Types.ObjectId(session.user.id),
-				}).populate('fund');
+				}).populate({ path: 'fund', model: Fund });
 
 				let allAssets: any = [];
 
@@ -42,7 +43,7 @@ export default async function handler(
 				if (type === undefined) {
 					const allBallots = await Ballot.find({
 						stock: { $in: dedupedAssets },
-					}).populate('stock');
+					}).populate({ path: 'stock', model: Stock });
 					ballots = [...ballots, ...allBallots];
 				}
 
@@ -56,7 +57,7 @@ export default async function handler(
 						ballotStart: { $lte: currentDate },
 						ballotEnd: { $gt: currentDate },
 					})
-						.populate('stock')
+						.populate({ path: 'stock', model: Stock })
 						.sort({ ballotStart: 'desc' });
 					ballots = [...ballots, ...availableBallots];
 				}
@@ -66,7 +67,7 @@ export default async function handler(
 						stock: { $in: dedupedAssets },
 						ballotStart: { $gt: currentDate },
 					})
-						.populate('stock')
+						.populate({ path: 'stock', model: Stock })
 						.sort({ ballotStart: 'desc' });
 					ballots = [...ballots, ...upcomingBallots];
 				}

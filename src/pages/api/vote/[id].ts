@@ -32,7 +32,7 @@ export default async function handler(
 				const vote: IVoteDoc | null = await Vote.findById<IVoteDoc>({
 					_id: id,
 					user: session.user.id,
-				}).populate('ballot');
+				}).populate({ path: 'ballot', model: Ballot });
 
 				if (!vote) {
 					return res.status(404).json({ message: 'Could not find vote.' });
@@ -57,7 +57,7 @@ export default async function handler(
 			try {
 				const vote: IVoteDoc | null = await Vote.findById<IVoteDoc>(
 					id
-				).populate('ballot');
+				).populate({ path: 'ballot', model: Ballot });
 
 				if (!vote) {
 					return res.status(400).json({ message: 'Vote not found.' });

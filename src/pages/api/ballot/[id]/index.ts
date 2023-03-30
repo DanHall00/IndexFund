@@ -30,7 +30,10 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const ballot = await Ballot.findById(id).populate('stock');
+				const ballot = await Ballot.findById(id).populate({
+					path: 'stock',
+					model: Stock,
+				});
 
 				if (!ballot) {
 					return res.status(404).json({ message: 'Could not find ballot.' });

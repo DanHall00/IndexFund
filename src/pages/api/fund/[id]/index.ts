@@ -4,6 +4,7 @@ import {
 	IFundDoc,
 	UpdateFundBody,
 } from '@/modules/funds/fund.interfaces';
+import { Stock } from '@/modules/stocks';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../../lib/mongodb';
@@ -26,7 +27,10 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const fund = await Fund.findById(id).populate('assets');
+				const fund = await Fund.findById(id).populate({
+					path: 'assets',
+					model: Stock,
+				});
 
 				const userFund = await UserFund.findOne({
 					fund: id,

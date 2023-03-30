@@ -23,7 +23,7 @@ export default async function handler(
 		case 'GET':
 			try {
 				const votes = await Vote.find({ user: session.user.id })
-					.populate('ballot')
+					.populate({ path: 'ballot', model: Ballot })
 					.sort({ createdAt: 'desc' });
 				res.status(200).json(votes);
 			} catch (err) {
