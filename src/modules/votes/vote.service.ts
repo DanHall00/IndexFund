@@ -24,4 +24,19 @@ const getVoteById = async (id: any) => {
 	}
 };
 
-export { getVoteById, getVotingHistory };
+const createVote = async (updateBody: { ballot: string; action: string }) => {
+	try {
+		const vote = await (
+			await fetch(`/api/vote`, {
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+				body: JSON.stringify(updateBody),
+			})
+		).json();
+		return vote;
+	} catch (e) {
+		return { error: 'Could not load vote.' };
+	}
+};
+
+export { createVote, getVoteById, getVotingHistory };

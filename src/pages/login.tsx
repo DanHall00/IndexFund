@@ -1,4 +1,5 @@
 import AuthLayout from '@/components/layout/AuthLayout';
+import { LoadingButton } from '@mui/lab';
 import {
 	Alert,
 	Box,
@@ -8,28 +9,54 @@ import {
 	Typography,
 } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const Login = () => {
-	// Hooks
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * Hooks
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { status } = useSession();
 
-	// States
-	const [userData, setUserData] = useState({
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATES
+	 * ----------------------------------------------------------------------------------
+	 */
+	const [userData, setUserData] = useState<{
+		username: string;
+		password: string;
+	}>({
 		username: '',
 		password: '',
 	});
 	const [errorText, setErrorText] = useState<string | null>(null);
+	const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * PAGE ACCESS CONTROL
+	 * ----------------------------------------------------------------------------------
+	 */
 	// If there is already a user logged in, navigate to the app
 	if (status === 'authenticated') {
 		router.push('/');
 	}
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * METHODS
+	 * ----------------------------------------------------------------------------------
+	 */
+
+	// Handle a user logging in
 	const handleSubmit = async (e: React.FormEvent<HTMLDivElement>) => {
 		e.preventDefault();
+		setIsSigningIn(true);
 		// Reset error text
 		setErrorText(null);
 
@@ -39,7 +66,7 @@ const Login = () => {
 			password: userData.password,
 			redirect: false,
 		});
-
+		setIsSigningIn(false);
 		// Check whether login was successful
 		if (result?.ok) {
 			// TODO: Low Priority - push to callback url
@@ -49,8 +76,16 @@ const Login = () => {
 		}
 	};
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * VIEW
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
+			<Head>
+				<title>Login</title>
+			</Head>
 			<AuthLayout>
 				<Typography variant="h3">Login to your account</Typography>
 				<Divider sx={{ my: 2 }} />
@@ -85,9 +120,15 @@ const Login = () => {
 							setUserData({ ...userData, password: e.target.value });
 						}}
 					/>
-					<Button type="submit" variant="contained" fullWidth value="Register">
+					<LoadingButton
+						type="submit"
+						variant="contained"
+						fullWidth
+						value="Register"
+						loading={isSigningIn}
+					>
 						Login
-					</Button>
+					</LoadingButton>
 				</Box>
 				<Divider sx={{ my: 2 }} />
 				<Button

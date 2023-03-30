@@ -1,50 +1,52 @@
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
-import VoteTable from '@/components/votes/VoteTable';
-import { IVoteDoc } from '@/modules/votes/vote.interfaces';
-import { getVotingHistory } from '@/modules/votes/vote.service';
-import {
-	Box,
-	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	Chip,
-	CircularProgress,
-	Grid,
-	Table,
-	TableCell,
-	TableHead,
-	TableRow,
-	Typography,
-} from '@mui/material';
+import { IStockDoc } from '@/modules/stocks/stock.interfaces';
+import { IUserDoc } from '@/modules/users/user.interfaces';
+import { getAllUsers } from '@/modules/users/user.service';
+import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-export default function History() {
+export default function Users() {
 	const router = useRouter();
+	const { data: session } = useSession();
+
 	const {
-		data: voteHistory,
-		isLoading: voteHistoryIsLoading,
-		isFetching: voteHistoryIsFetching,
-	} = useQuery(['voteHistory'], getVotingHistory, {
-		refetchOnWindowFocus: false,
-	});
+		data: allUsers,
+		isLoading: allUsersLoading,
+		isFetching: allUsersFetching,
+	} = useQuery(['users'], getAllUsers, { refetchOnWindowFocus: false });
 
 	return (
 		<>
 			<Head>
-				<title>Voting History</title>
+				<title>Users</title>
 			</Head>
 			<AppLayout>
 				<Typography variant="h3" gutterBottom>
-					Voting History
+					Users
 				</Typography>
-				{!voteHistoryIsLoading && !voteHistoryIsFetching ? (
-					voteHistory && !voteHistory.error ? (
-						voteHistory.length > 0 ? (
-							<VoteTable votes={voteHistory} />
+				<Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
+					<Button variant="contained" onClick={() => {}} color="secondary">
+						Create Stock
+					</Button>
+				</Box>
+				{!allUsersLoading && !allUsersFetching ? (
+					allUsers ? (
+						allUsers.length > 0 ? (
+							<>
+								<Grid container spacing={3}>
+									{allUsers.map((item: IUserDoc) => (
+										<Shortcut
+											key={item.id}
+											title={`${item.username}`}
+											description={`${item.role}`}
+										/>
+									))}
+								</Grid>
+							</>
 						) : (
 							<>
 								<Box
@@ -52,14 +54,12 @@ export default function History() {
 										display: 'flex',
 										justifyContent: 'center',
 										flexDirection: 'column',
-										alignContent: 'center',
 										textAlign: 'center',
 										gap: 2,
 									}}
 								>
 									<Typography variant="subtitle1">
-										You currently haven&apos;t voted in any ballots, when you do
-										your votes will appear here.
+										Looks like there are currently no stocks available.
 									</Typography>
 								</Box>
 							</>
@@ -77,7 +77,7 @@ export default function History() {
 								}}
 							>
 								<Typography variant="subtitle1">
-									An error occured while retrieving your votes, please try again
+									An error occured while retrieving stocks, please try again
 									later.
 								</Typography>
 							</Box>
@@ -95,7 +95,7 @@ export default function History() {
 						}}
 					>
 						<CircularProgress variant="indeterminate" />
-						<Typography variant="subtitle1">Loading Your Votes</Typography>
+						<Typography variant="subtitle1">Loading Stocks</Typography>
 					</Box>
 				)}
 			</AppLayout>

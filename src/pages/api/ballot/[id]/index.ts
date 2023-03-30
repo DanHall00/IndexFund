@@ -4,6 +4,9 @@ import {
 	UpdateBallotBody,
 } from '@/modules/ballots/ballot.interfaces';
 import { IStock, UpdateStockBody } from '@/modules/stocks/stock.interfaces';
+import { Vote } from '@/modules/votes';
+import { IVoteDoc } from '@/modules/votes/vote.interfaces';
+import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../../lib/mongodb';
@@ -27,7 +30,25 @@ export default async function handler(
 		case 'GET':
 			try {
 				const ballot = await Ballot.findById(id).populate('stock');
-				return res.status(200).json(ballot);
+
+				if (!ballot) {
+					return res.status(404).json({ message: 'Could not find ballot.' });
+				}
+
+				const userVote = await Vote.findOne<IVoteDoc>({
+					ballot: new mongoose.Types.ObjectId(String(id)),
+					user: new mongoose.Types.ObjectId(String(session.user.id)),
+				});
+
+				let votes;
+
+				if (userVote) {
+					votes = await Vote.find({
+						ballot: new mongoose.Types.ObjectId(String(id)),
+					}).select('action');
+				}
+
+				return res.status(200).json({ ballot, votes, vote: userVote?.action });
 			} catch (err) {
 				console.log(err);
 				return res.status(500).json({ message: 'Could not get ballot.' });

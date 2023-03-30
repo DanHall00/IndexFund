@@ -1,6 +1,6 @@
 import { Ballot } from '@/modules/ballots';
 import { Vote } from '@/modules/votes';
-import { IVote } from '@/modules/votes/vote.interfaces';
+import { IVote, IVoteDoc, VoteOption } from '@/modules/votes/vote.interfaces';
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
@@ -24,7 +24,7 @@ export default async function handler(
 			try {
 				const votes = await Vote.find({ user: session.user.id })
 					.populate('ballot')
-					.sort('desc');
+					.sort({ createdAt: 'desc' });
 				res.status(200).json(votes);
 			} catch (err) {
 				console.log(err);
@@ -34,15 +34,21 @@ export default async function handler(
 		case 'POST':
 			const voteBody: IVote = req.body;
 			try {
-				const existingVote = await Vote.findOne({
+				const existingVote = await Vote.findOne<IVoteDoc>({
 					ballot: voteBody.ballot,
 					user: new mongoose.Types.ObjectId(session.user.id),
 				});
 
 				if (existingVote) {
-					return res.status(500).json({
-						message: 'You can not vote for the same ballot more than once.',
-					});
+					if (existingVote.action === VoteOption.NO_VOTE) {
+						existingVote.action = voteBody.action;
+						existingVote.save();
+						return res.status(200).json(existingVote);
+					} else {
+						return res.status(500).json({
+							message: 'You can not vote for the same ballot more than once.',
+						});
+					}
 				}
 
 				const ballot = await Ballot.findById(voteBody.ballot);

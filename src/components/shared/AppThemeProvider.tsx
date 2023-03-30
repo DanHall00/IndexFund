@@ -7,7 +7,7 @@ import {
 } from '@mui/material/styles';
 import React from 'react';
 
-const primary = '#af4c2a';
+const primary = '#E85C27';
 const secondary = '#2f699f';
 
 const background = '#0c0e0f';

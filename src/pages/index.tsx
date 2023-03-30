@@ -1,5 +1,6 @@
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
+import { getAvailableBallots } from '@/modules/ballots/ballot.service';
 import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
 import { getUserFunds } from '@/modules/funds/fund.service';
 import { getCurrentUser } from '@/modules/users/user.service';
@@ -53,6 +54,14 @@ const Overview = () => {
 	const { data: voteHistory } = useQuery(['voteHistory'], getVotingHistory, {
 		refetchOnWindowFocus: false,
 	});
+
+	const { data: availableBallots } = useQuery(
+		['availableBallots'],
+		getAvailableBallots,
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
 
 	useEffect(() => {
 		if (allFunds) {
@@ -126,14 +135,20 @@ const Overview = () => {
 						action={() => router.push('/investments')}
 					/>
 					<Shortcut
-						title="Available Votes"
-						value="12"
-						action={() => router.push('/investments')}
+						title="Available Ballots"
+						value={
+							availableBallots ? (
+								availableBallots.length
+							) : (
+								<Skeleton width="80%" />
+							)
+						}
+						action={() => router.push('/ballots')}
 					/>
 					<Shortcut
 						title="Your Past Votes"
-						value={voteHistory ? voteHistory.length : <Skeleton width="100%" />}
-						action={() => router.push('/history')}
+						value={voteHistory ? voteHistory.length : <Skeleton width="80%" />}
+						action={() => router.push('/votes')}
 					/>
 					<Shortcut
 						title="Available Cash"

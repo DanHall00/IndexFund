@@ -11,6 +11,38 @@ const getFunds = async () => {
 	}
 };
 
+const createUserFund = async (updateBody: {
+	fund: string;
+	initialValue: number;
+	value: number;
+}) => {
+	try {
+		const userFund = await (
+			await fetch(`/api/fund/user`, {
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+				body: JSON.stringify(updateBody),
+			})
+		).json();
+		return userFund;
+	} catch (e) {
+		return { error: 'Could not create user fund.' };
+	}
+};
+
+const getUserFundById = async (id: any) => {
+	try {
+		const fund = await (
+			await fetch(`/api/fund/user/${id}`, {
+				headers: { 'Content-Type': 'application/json' },
+			})
+		).json();
+		return fund;
+	} catch (e) {
+		return { error: 'Could not load fund.' };
+	}
+};
+
 const getUserFunds = async () => {
 	try {
 		const funds = await (
@@ -37,4 +69,4 @@ const getFundById = async (id: any) => {
 	}
 };
 
-export { getFundById, getFunds, getUserFunds };
+export { createUserFund, getFundById, getFunds, getUserFundById, getUserFunds };

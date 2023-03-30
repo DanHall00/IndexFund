@@ -1,8 +1,12 @@
-import { UserFund } from '@/modules/funds';
+import { Ballot } from '@/modules/ballots';
+import { IBallotDoc } from '@/modules/ballots/ballot.interfaces';
+import { Fund, UserFund } from '@/modules/funds';
 import {
+	IFundDoc,
 	IUserFundDoc,
 	UpdateUserFundBody,
 } from '@/modules/funds/fund.interfaces';
+import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import dbConnect from '../../../../../lib/mongodb';
@@ -25,8 +29,31 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const userFund = await UserFund.findById(id);
-				return res.status(200).json(userFund);
+				const userFund: IUserFundDoc | null =
+					await UserFund.findById<IUserFundDoc>(id);
+				if (!userFund) {
+					return res.status(404).json({ message: 'Could not find user fund.' });
+				}
+
+				const fund: IFundDoc | null = await Fund.findById<IFundDoc>(
+					userFund.fund
+				).populate('assets');
+
+				if (!fund) {
+					return res.status(404).json({ message: 'Could not find fund.' });
+				}
+
+				const ballots = await Ballot.find({
+					stock: {
+						$in: fund.assets.map(
+							(asset) => new mongoose.Types.ObjectId(asset.id)
+						),
+					},
+				})
+					.populate('stock')
+					.sort({ ballotStart: 'desc' });
+
+				return res.status(200).json({ userFund: userFund, fund, ballots });
 			} catch (err) {
 				console.log(err);
 				return res.status(500).json({ message: 'Could not get user fund.' });

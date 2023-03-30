@@ -4,7 +4,10 @@ import Shortcut from '@/components/shared/Shortcut';
 import { getAvailableBallots } from '@/modules/ballots/ballot.service';
 import { IUserFundDoc } from '@/modules/funds/fund.interfaces';
 import { getUserFunds } from '@/modules/funds/fund.service';
+import { IStockDoc } from '@/modules/stocks/stock.interfaces';
+import { getAllStocks } from '@/modules/stocks/stock.service';
 import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
@@ -14,53 +17,50 @@ const GBPound = new Intl.NumberFormat(undefined, {
 	currency: 'GBP',
 });
 
-export default function Investments() {
+export default function Stocks() {
 	const router = useRouter();
+	const { data: session } = useSession();
 
 	const {
-		data: allFunds,
-		isLoading: allFundsLoading,
-		isFetching: allFundsFetching,
-	} = useQuery(['userFunds'], getUserFunds, { refetchOnWindowFocus: false });
+		data: allStocks,
+		isLoading: allStocksLoading,
+		isFetching: allStocksFetching,
+	} = useQuery(['stocks'], getAllStocks, { refetchOnWindowFocus: false });
 
 	return (
 		<>
 			<Head>
-				<title>Investments</title>
+				<title>Stocks</title>
 			</Head>
 			<AppLayout>
 				<Typography variant="h3" gutterBottom>
-					Investments
+					Stocks
 				</Typography>
-				{!allFundsLoading && !allFundsFetching ? (
-					allFunds && !allFunds.error ? (
-						allFunds.length > 0 ? (
+				<Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
+					<Button variant="contained" onClick={() => {}} color="secondary">
+						Create Stock
+					</Button>
+				</Box>
+				{!allStocksLoading && !allStocksFetching ? (
+					allStocks ? (
+						allStocks.length > 0 ? (
 							<>
-								<Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
-									<Button
-										variant="contained"
-										onClick={() => router.push('/funds')}
-										color="secondary"
-									>
-										Invest
-									</Button>
-								</Box>
 								<Grid container spacing={3}>
-									{allFunds.map((item: IUserFundDoc) => (
+									{allStocks.map((item: IStockDoc) => (
 										<Shortcut
 											key={item.id}
-											title={item.fund.name}
-											description={`Total Holdings: ${item.fund.assets.length} assets.`}
-											value={GBPound.format(item.value)}
-											valueProps={{
-												color:
-													item.value >= item.initialValue
-														? item.value === item.initialValue
-															? '#FBFBFB'
-															: '#2AA728'
-														: '#DC6262',
-											}}
-											action={() => router.push(`/investments/${item.id}`)}
+											title={`${item.name} - ${item.abbreviation}`}
+											description={`${item.sector}`}
+											value={GBPound.format(item.price)}
+											action={
+												session?.user.role === 'admin'
+													? () => {
+															console.log('Delete Stock');
+													  }
+													: undefined
+											}
+											actionColor="error"
+											actionLabel="Delete Stock"
 										/>
 									))}
 								</Grid>
@@ -77,15 +77,8 @@ export default function Investments() {
 									}}
 								>
 									<Typography variant="subtitle1">
-										Looks like you currently aren&apos;t invested in any funds.
+										Looks like there are currently no stocks available.
 									</Typography>
-									<Button
-										variant="contained"
-										sx={{ color: 'white' }}
-										onClick={() => router.push('/funds')}
-									>
-										Invest
-									</Button>
 								</Box>
 							</>
 						)
@@ -102,7 +95,7 @@ export default function Investments() {
 								}}
 							>
 								<Typography variant="subtitle1">
-									An error occured while retrieving your funds, please try again
+									An error occured while retrieving stocks, please try again
 									later.
 								</Typography>
 							</Box>
@@ -120,7 +113,7 @@ export default function Investments() {
 						}}
 					>
 						<CircularProgress variant="indeterminate" />
-						<Typography variant="subtitle1">Loading Your Funds</Typography>
+						<Typography variant="subtitle1">Loading Stocks</Typography>
 					</Box>
 				)}
 			</AppLayout>

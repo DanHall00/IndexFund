@@ -1,10 +1,12 @@
 import {
 	AccountBalance,
+	Ballot,
 	Business,
 	ChevronLeft as ChevronLeftIcon,
 	ChevronRight as ChevronRightIcon,
 	Dashboard,
 	History as HistoryIcon,
+	People,
 	ShowChart,
 } from '@mui/icons-material';
 import {
@@ -74,6 +76,12 @@ export default function Navbar({
 					drawerOpen={drawerOpen}
 				/>
 				<NavButton
+					path="ballots"
+					label="Ballots"
+					icon={Ballot}
+					drawerOpen={drawerOpen}
+				/>
+				<NavButton
 					path="votes"
 					label="Voting History"
 					icon={HistoryIcon}
@@ -102,6 +110,12 @@ export default function Navbar({
 							path="stock"
 							label="Stock"
 							icon={Business}
+							drawerOpen={drawerOpen}
+						/>
+						<NavButton
+							path="user"
+							label="User"
+							icon={People}
 							drawerOpen={drawerOpen}
 						/>
 					</List>

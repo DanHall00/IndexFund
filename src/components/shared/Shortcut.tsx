@@ -17,6 +17,7 @@ interface IShortcutProps {
 	valueProps?: {};
 	action?: () => void;
 	actionLabel?: string;
+	actionColor?: any;
 }
 
 export default function Shortcut({
@@ -26,6 +27,7 @@ export default function Shortcut({
 	valueProps,
 	action,
 	actionLabel = 'View Details',
+	actionColor = 'secondary',
 }: IShortcutProps) {
 	return (
 		<Grid item xs={12} md={6} lg={3}>
@@ -39,26 +41,28 @@ export default function Shortcut({
 				}}
 			>
 				<CardHeader title={title} subheader={description} />
-				<CardContent
-					sx={{
-						...valueProps,
-						textAlign: 'center',
-						fontWeight: 600,
-						fontSize: 24,
-						flexGrow: 1,
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					{value}
-				</CardContent>
+				{(value === 0 || value) && (
+					<CardContent
+						sx={{
+							...valueProps,
+							textAlign: 'center',
+							fontWeight: 600,
+							fontSize: 24,
+							flexGrow: 1,
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						{value}
+					</CardContent>
+				)}
 				{action && (
 					<CardActions>
 						<Button
 							variant="contained"
 							fullWidth
-							color="secondary"
+							color={actionColor}
 							onClick={action}
 						>
 							{actionLabel}

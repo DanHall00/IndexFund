@@ -1,4 +1,5 @@
 import AuthLayout from '@/components/layout/AuthLayout';
+import { LoadingButton } from '@mui/lab';
 import {
 	Alert,
 	Box,
@@ -8,15 +9,24 @@ import {
 	Typography,
 } from '@mui/material';
 import { signIn, useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const Register = () => {
-	// Hooks
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * Hooks
+	 * ----------------------------------------------------------------------------------
+	 */
 	const router = useRouter();
 	const { status } = useSession();
 
-	// States
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * LOCAL STATES
+	 * ----------------------------------------------------------------------------------
+	 */
 	const [userData, setUserData] = useState({
 		username: '',
 		email: '',
@@ -24,19 +34,40 @@ const Register = () => {
 		confirmPassword: '',
 	});
 	const [errorText, setErrorText] = useState<string | null>(null);
+	const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * PAGE ACCESS CONTROL
+	 * ----------------------------------------------------------------------------------
+	 */
 	// If there is already a user logged in, navigate to the app
 	if (status === 'authenticated') {
 		router.push('/');
 	}
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * METHODS
+	 * ----------------------------------------------------------------------------------
+	 */
+
+	// Handle a user registering an account
 	const handleSubmit = async (e: React.FormEvent<HTMLDivElement>) => {
 		e.preventDefault();
+		setIsRegistering(true);
 		// Reset error text
 		setErrorText(null);
 
+		// Check if the username contains a space
+		if (/\s/g.test(userData.username)) {
+			setIsRegistering(false);
+			return setErrorText('Usernames are not allowed spaces.');
+		}
+
 		// Check that the confirm password matches
 		if (userData.password !== userData.confirmPassword) {
+			setIsRegistering(false);
 			return setErrorText('Passwords did not match.');
 		}
 
@@ -58,6 +89,7 @@ const Register = () => {
 		// Handle process based on response
 		switch (registerRequest.status) {
 			case 400:
+				setIsRegistering(false);
 				return setErrorText(registerResponse.message);
 			case 200:
 				// Login to application
@@ -65,16 +97,26 @@ const Register = () => {
 					username: userData.username,
 					password: userData.password,
 				});
+				setIsRegistering(false);
 				// Navigate to app
 				router.push('/');
 				break;
 			default:
+				setIsRegistering(false);
 				return setErrorText('Could not create account at this time.');
 		}
 	};
 
+	/*
+	 * ----------------------------------------------------------------------------------
+	 * VIEW
+	 * ----------------------------------------------------------------------------------
+	 */
 	return (
 		<>
+			<Head>
+				<title>Register</title>
+			</Head>
 			<AuthLayout>
 				<Typography variant="h3">Register for an account</Typography>
 				<Divider sx={{ my: 2 }} />
@@ -127,9 +169,15 @@ const Register = () => {
 							setUserData({ ...userData, confirmPassword: e.target.value });
 						}}
 					/>
-					<Button type="submit" variant="contained" fullWidth value="Register">
+					<LoadingButton
+						loading={isRegistering}
+						type="submit"
+						variant="contained"
+						fullWidth
+						value="Register"
+					>
 						Register
-					</Button>
+					</LoadingButton>
 				</Box>
 				<Divider sx={{ my: 2 }} />
 				<Button

@@ -1,5 +1,6 @@
 import AppLayout from '@/components/layout/AppLayout';
 import Shortcut from '@/components/shared/Shortcut';
+import VoteChart from '@/components/votes/VoteChart';
 import { IFundDoc } from '@/modules/funds/fund.interfaces';
 import { getFundById } from '@/modules/funds/fund.service';
 import { IStockDoc } from '@/modules/stocks/stock.interfaces';
@@ -11,35 +12,17 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
+	Chip,
 	Grid,
 	IconButton,
 	Skeleton,
 	Typography,
 } from '@mui/material';
-import {
-	BarElement,
-	CategoryScale,
-	Chart as ChartJS,
-	Legend,
-	LinearScale,
-	Title,
-	Tooltip,
-} from 'chart.js';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend
-);
 
 const GBPound = new Intl.NumberFormat(undefined, {
 	style: 'currency',
@@ -61,6 +44,7 @@ const Vote = () => {
 		Abstain: 0,
 		['No Vote']: 0,
 	});
+	const [currentDate, setCurrentDate] = useState(new Date());
 
 	const {
 		data: vote,
@@ -78,12 +62,19 @@ const Vote = () => {
 	useEffect(() => {
 		if (vote) {
 			if (Array.isArray(vote.results)) {
+				const localResults: any = {
+					For: 0,
+					Against: 0,
+					Abstain: 0,
+					['No Vote']: 0,
+				};
 				for (const key of Object.keys(voteResults)) {
 					const count = vote.results.filter(
 						(_vote: { action: string; id: string }) => _vote.action === key
 					).length;
-					setVoteResults({ ...voteResults, [key]: count });
+					localResults[key] = count;
 				}
+				setVoteResults(localResults);
 			}
 		}
 	}, [vote]);
@@ -100,7 +91,7 @@ const Vote = () => {
 				</title>
 			</Head>
 			<AppLayout>
-				<Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 3 }}>
+				<Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
 					<IconButton onClick={() => router.push('/votes')}>
 						<ArrowBack />
 					</IconButton>
@@ -114,7 +105,32 @@ const Vote = () => {
 				</Box>
 				<Grid container spacing={3}>
 					<Grid item xs={12} lg={8}>
-						<Typography variant="body1">
+						{!voteLoading && !voteFetching ? (
+							vote?.vote ? (
+								<Chip label={vote.vote.ballot.category} sx={{ mb: 1 }} />
+							) : null
+						) : (
+							<>
+								<Skeleton width="10%" />
+							</>
+						)}
+						{!voteLoading && !voteFetching ? (
+							vote?.vote ? (
+								<Typography variant="subtitle1">
+									{new Date(vote.vote.ballot.ballotStart).toDateString()} -{' '}
+									{new Date(vote.vote.ballot.ballotEnd).toDateString()} (
+									{currentDate < new Date(vote.vote.ballot.ballotEnd)
+										? 'In Progress'
+										: 'Voting has Ended'}
+									)
+								</Typography>
+							) : null
+						) : (
+							<>
+								<Skeleton width="30%" />
+							</>
+						)}
+						<Typography variant="body2">
 							{!voteLoading && !voteFetching ? (
 								vote?.vote ? (
 									vote.vote.ballot.description
@@ -193,42 +209,12 @@ const Vote = () => {
 							</CardContent>
 						</Card>
 					</Grid>
-					<Grid container justifyContent="center" sx={{ mt: 3 }}>
-						<Grid item xs={6}>
-							<Bar
-								options={{
-									responsive: true,
-									plugins: {
-										title: {
-											display: true,
-											text: 'Vote Results',
-											font: {
-												size: 20,
-												family: "'Cabin', sans-serif",
-											},
-										},
-										legend: {
-											display: false,
-										},
-									},
-								}}
-								data={{
-									labels: ['For', 'Against', 'Abstain', 'No Vote'],
-									datasets: [
-										{
-											data: [
-												voteResults?.For,
-												voteResults?.Against,
-												voteResults?.Abstain,
-												voteResults['No Vote'],
-											],
-											backgroundColor: '#af4c2a',
-										},
-									],
-								}}
-							/>
-						</Grid>
-					</Grid>
+					<VoteChart
+						For={voteResults?.For}
+						Against={voteResults?.Against}
+						Abstain={voteResults?.Abstain}
+						NoVote={voteResults['No Vote']}
+					/>
 				</Grid>
 			</AppLayout>
 		</>

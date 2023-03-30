@@ -1,4 +1,4 @@
-import { Fund } from '@/modules/funds';
+import { Fund, UserFund } from '@/modules/funds';
 import {
 	IFund,
 	IFundDoc,
@@ -26,8 +26,14 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			try {
-				const stock = await Fund.findById(id).populate('assets');
-				return res.status(200).json(stock);
+				const fund = await Fund.findById(id).populate('assets');
+
+				const userFund = await UserFund.findOne({
+					fund: id,
+					user: session.user.id,
+				});
+
+				return res.status(200).json({ fund, userFund });
 			} catch (err) {
 				console.log(err);
 				return res.status(500).json({ message: 'Could not get funds.' });
